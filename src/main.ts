@@ -18,6 +18,7 @@ const client_id = process.env.CLIENT_ID;
 const rest = new REST({ version: '10' }).setToken(token);
 
 async function startDiscordConnection() {
+  console.log('Starting Discord connection...');
   await rest.put(Routes.applicationCommands(client_id), {
     body: commands.map((command) => {
       return {
@@ -38,12 +39,15 @@ async function startDiscordConnection() {
   });
 
   client.login(token);
+  console.log('Discord connection started');
 }
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.useGlobalPipes(new ValidationPipe());
   await app.listen(process.env.PORT || 3000);
+  console.log(`Server started on port ${process.env.PORT || 3000}`);
+  console.log(`Starting Discord connection with token ${token}...`);
   startDiscordConnection();
 }
 bootstrap();

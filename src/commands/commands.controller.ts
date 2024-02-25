@@ -18,7 +18,11 @@ export class Commands {
   }
 
   async sendServerMessage(interaction: CommandInteraction) {
-    await new DiscordRoleGuard().isAdmin(interaction);
-    await sendMessageInServerWithCommand(interaction);
+    try {
+      await new DiscordRoleGuard().isAdmin(interaction);
+      await sendMessageInServerWithCommand(interaction);
+    } catch (error) {
+      console.log(error);
+    }
   }
 }
