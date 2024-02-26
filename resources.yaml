@@ -17,3 +17,14 @@ spec:
           image: us-central1-docker.pkg.dev/GOOGLE_PROJECT/bob/nest
           ports:
             - containerPort: 8080
+          env:
+            - name: CLIENT_ID
+              value: ENV_CLIENT_ID
+            - name: CLIENT_SECRET
+              value: ENV_CLIENT_SECRET
+            - name: DISCORD_TOKEN
+              value: ENV_DISCORD_TOKEN
+            - name: ADMIN_ROLES
+              value: ENV_ADMIN_ROLES
+            - name: SERVER_ID
+              value: ENV_SERVER_ID

@@ -11,6 +11,11 @@ jobs:
     env:
       GOOGLE_APPLICATION_CREDENTIALS: ${{ vars.GOOGLE_APPLICATION_CREDENTIALS }}
       GOOGLE_PROJECT: ${{ vars.GOOGLE_PROJECT }}
+      CLIENT_ID: ${{ vars.CLIENT_ID }}
+      CLIENT_SECRET: ${{ vars.CLIENT_SECRET }}
+      DISCORD_TOKEN: ${{ vars.DISCORD_TOKEN }}
+      ADMIN_ROLES: ${{ vars.ADMIN_ROLES }}
+      SERVER_ID: ${{ vars.SERVER_ID }}
 
     steps:
       - name: Checkout code
@@ -37,4 +42,9 @@ jobs:
         run: |
           gcloud container clusters get-credentials autopilot-cluster-1 --region us-central1
           sed -i "s/GOOGLE_PROJECT/$GOOGLE_PROJECT/g" resources.yaml
+          sed -i "s/ENV_CLIENT_ID/$CLIENT_ID/g" resources.yaml
+          sed -i "s/ENV_CLIENT_SECRET/$CLIENT_SECRET/g" resources.yaml
+          sed -i "s/ENV_DISCORD_TOKEN/$DISCORD_TOKEN/g" resources.yaml
+          sed -i "s/ENV_ADMIN_ROLES/$ADMIN_ROLES/g" resources.yaml
+          sed -i "s/ENV_SERVER_ID/$SERVER_ID/g" resources.yaml          
           kubectl apply -f resources.yaml
