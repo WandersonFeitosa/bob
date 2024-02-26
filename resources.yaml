@@ -30,7 +30,7 @@ spec:
         - name: bob
           image: us-central1-docker.pkg.dev/GOOGLE_PROJECT/bob/nest
           ports:
-            - containerPort: 8080
+            - containerPort: 3000
           env:
             - name: CLIENT_ID
               value: ENV_CLIENT_ID
