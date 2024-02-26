@@ -28,16 +28,12 @@ jobs:
           install_components: 'gke-gcloud-auth-plugin'
 
       - name: build and push the docker image
-        env:
-          GOOGLE_PROJECT: ${{ vars.GOOGLE_PROJECT }}
         run: |
           gcloud auth configure-docker us-central1-docker.pkg.dev
           docker build -t us-central1-docker.pkg.dev/$GOOGLE_PROJECT/bob/nest .
           docker push us-central1-docker.pkg.dev/$GOOGLE_PROJECT/bob/nest
 
       - name: deploy to GKE
-        env:
-          GOOGLE_PROJECT: ${{ vars.GOOGLE_PROJECT }}
         run: |
           gcloud container clusters get-credentials autopilot-cluster-1 --region us-central1
           sed -i "s/GOOGLE_PROJECT/$GOOGLE_PROJECT/g" resources.yaml
