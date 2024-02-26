@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bob
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bob
+  template:
+    metadata:
+      labels:
+        app: bob
+    spec:
+      containers:
+        - name: bob
+          image: us-central1-docker.pkg.dev/GOOGLE_PROJECT/bob
+          ports:
+            - containerPort: 8080
