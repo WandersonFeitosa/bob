@@ -47,7 +47,9 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe());
   await app.listen(process.env.PORT || 3000);
   console.log(`Server started on port ${process.env.PORT || 3000}`);
-  console.log(`Starting Discord connection with token ${token}...`);
+  console.log(
+    `Starting Discord connection with admin roles ${process.env.ADMIN_ROLES || ''}...`,
+  );
   startDiscordConnection();
 }
 bootstrap();
