@@ -50,6 +50,11 @@ const commands: Command[] = [
       },
     ],
   },
+  {
+    name: 'dummy',
+    description: 'Comando de teste',
+    function: new Commands().dummy,
+  },
 ];
 
 function buildCommandsObject(commands: Command[]): Record<string, Command> {

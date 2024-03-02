@@ -4,6 +4,7 @@ import { ana } from './service/ana';
 import { startServer } from './service/start-server';
 import { sendMessageInServerWithCommand } from './service/send-server-message';
 import { DiscordRoleGuard } from 'src/guard/discord-role.guard';
+import { dummy } from './service/dummy';
 
 export class Commands {
   constructor() {}
@@ -24,5 +25,9 @@ export class Commands {
     } catch (error) {
       console.log(error);
     }
+  }
+
+  async dummy(interaction: CommandInteraction) {
+    dummy(interaction);
   }
 }
