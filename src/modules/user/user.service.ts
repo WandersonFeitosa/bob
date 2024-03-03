@@ -53,7 +53,7 @@ export class UserService {
       throw new HttpException('Usuário ou Senha inválido', 401);
     }
 
-    const passwordMatch = bcrypt.compare(password, user.password);
+    const passwordMatch = await bcrypt.compare(password, user.password);
 
     if (!passwordMatch) {
       throw new HttpException('Usuário ou Senha inválido', 401);
