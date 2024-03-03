@@ -16,6 +16,8 @@ jobs:
       DISCORD_TOKEN: ${{ vars.DISCORD_TOKEN }}
       ADMIN_ROLES: ${{ vars.ADMIN_ROLES }}
       SERVER_ID: ${{ vars.SERVER_ID }}
+      DATABASE_URL: ${{ vars.DATABASE_URL }}
+      JWT_SECRET: ${{ vars.JWT_SECRET }}
 
     steps:
       - name: Checkout code
@@ -46,5 +48,7 @@ jobs:
           sed -i "s/ENV_CLIENT_SECRET/$CLIENT_SECRET/g" resources.yaml
           sed -i "s/ENV_DISCORD_TOKEN/$DISCORD_TOKEN/g" resources.yaml
           sed -i "s/ENV_ADMIN_ROLES/$ADMIN_ROLES/g" resources.yaml
-          sed -i "s/ENV_SERVER_ID/$SERVER_ID/g" resources.yaml          
+          sed -i "s/ENV_SERVER_ID/$SERVER_ID/g" resources.yaml 
+          sed -i "s/ENV_DATABASE_URL/$DATABASE_URL/g" resources.yaml
+          sed -i "s/ENV_JWT_SECRET/$JWT_SECRET/g" resources.yaml         
           kubectl apply -f resources.yaml

@@ -42,3 +42,7 @@ spec:
               value: ENV_ADMIN_ROLES
             - name: SERVER_ID
               value: ENV_SERVER_ID
+            - name: DATABASE_URL
+              value: ENV_DATABASE_URL
+            - name: JWT_SECRET
+              value: ENV_JWT_SECRET
