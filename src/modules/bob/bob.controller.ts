@@ -6,11 +6,6 @@ import { SendServerMessageInputDto } from './dto/send-server-message.dto';
 export class BobController {
   constructor(private readonly bobService: BobService) {}
 
-  @Get()
-  getHello(): string {
-    return this.bobService.hello();
-  }
-
   @Post('send-server-message')
   sendServerMessage(@Body() dto: SendServerMessageInputDto) {
     return this.bobService.sendServerMessage(dto);

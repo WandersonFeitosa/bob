@@ -4,9 +4,6 @@ import { sendServerMessage } from 'src/utils/send-message-on-channel';
 
 @Injectable()
 export class BobService {
-  hello(): string {
-    return 'Hello World!';
-  }
   sendServerMessage(dto: SendServerMessageInputDto) {
     try {
       sendServerMessage({

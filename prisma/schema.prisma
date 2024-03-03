@@ -8,14 +8,32 @@ datasource db {
 }
 
 model User {
-  id    Int     @id @default(autoincrement())
-  email String  @unique
-  username String @unique
-  name  String?
-  password String
+  id          String        @id @default(uuid())
+  email       String        @unique
+  name        String?
+  password    String?
+  DiscordUser DiscordUser[]
 
+  create_at DateTime @default(now())
+  update_at DateTime @updatedAt
+  update_by String?
+  delete    Boolean  @default(false)
 
   @@map("db_user")
 }
 
+model DiscordUser {
+  id         String @id @default(uuid())
+  discord_id String @unique
+  username   String @unique
+  email      String @unique
+  user_id    String
+  user       User?  @relation(fields: [user_id], references: [id])
 
+  create_at DateTime @default(now())
+  update_at DateTime @updatedAt
+  update_by String?
+  delete    Boolean  @default(false)
+
+  @@map("db_discord_user")
+}
