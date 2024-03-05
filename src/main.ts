@@ -10,6 +10,7 @@ import {
 } from 'discord.js';
 import { commands, commandsObject } from './commands/commands.module';
 import { ValidationPipe } from '@nestjs/common';
+import { NextFunction, Request, Response } from 'express';
 
 export const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 const token = process.env.DISCORD_TOKEN;
@@ -47,8 +48,16 @@ async function startDiscordConnection() {
 }
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, {
+    cors: true,
+  });
   app.useGlobalPipes(new ValidationPipe());
+  app.use((req: Request, res: Response, next: NextFunction) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+    res.header('Access-Control-Allow-Headers', '*');
+    next();
+  });
   await app.listen(process.env.PORT || 3000);
   console.log(`Server started on port ${process.env.PORT || 3000}`);
   await startDiscordConnection();
