@@ -37,3 +37,29 @@ model DiscordUser {
 
   @@map("db_discord_user")
 }
+
+model DiscordMultipliers {
+  id       String @id @default(uuid())
+  username String
+  email    String
+  image    String
+
+  create_at DateTime @default(now())
+  update_at DateTime @updatedAt
+  update_by String?
+  delete    Boolean  @default(false)
+
+  @@map("db_discord_multipliers")
+}
+
+model Progress {
+  id      String @id @default(uuid())
+  progess Int
+
+  create_at DateTime @default(now())
+  update_at DateTime @updatedAt
+  update_by String?
+  delete    Boolean  @default(false)
+
+  @@map("db_progess")
+}
