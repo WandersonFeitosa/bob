@@ -46,3 +46,13 @@ spec:
               value: ENV_DATABASE_URL
             - name: JWT_SECRET
               value: ENV_JWT_SECRET
+            - name: MINECRAFT_SERVER_IP
+              value: ENV_MINECRAFT_SERVER_IP
+            - name: MINECRAFT_SERVER_PORT
+              value: ENV_MINECRAFT_SERVER_PORT
+            - name: MINECRAFT_MANAGER_PORT
+              value: ENV_MINECRAFT_MANAGER_PORT
+            - name: MINECRAFT_MANAGER_TOKEN
+              value: ENV_MINECRAFT_MANAGER_TOKEN
+            - name: MINECRAFT_ANNOUNCE_CHANNEL_ID
+              value: ENV_MINECRAFT_ANNOUNCE_CHANNEL_ID

@@ -1,4 +1,7 @@
+import { BobService } from 'src/modules/bob/bob.service';
 import { Commands } from './commands.controller';
+import { MinecraftService } from 'src/modules/minecraft/minecraft.service';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 interface Command {
   name: string;
@@ -51,6 +54,16 @@ const commands: Command[] = [
     ],
   },
   {
+    name: 'backup',
+    description: 'Inicia um backup do servidor',
+    function: new Commands().startBackup,
+  },
+  {
+    name: 'status',
+    description: 'Mostra o status do servidor',
+    function: new Commands().serverStatus,
+  },
+  {
     name: 'dummy',
     description: 'Comando de teste',
     function: new Commands().dummy,
@@ -67,4 +80,8 @@ function buildCommandsObject(commands: Command[]): Record<string, Command> {
 
 const commandsObject = buildCommandsObject(commands);
 
-export { commandsObject, commands };
+const prisma = new PrismaService();
+const bobService = new BobService();
+const minecraftService = new MinecraftService(prisma, bobService);
+
+export { commandsObject, commands, prisma, bobService, minecraftService };

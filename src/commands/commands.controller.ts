@@ -5,6 +5,8 @@ import { startServer } from './service/start-server';
 import { sendMessageInServerWithCommand } from './service/send-server-message';
 import { DiscordRoleGuard } from 'src/guard/discord-role.guard';
 import { dummy } from './service/dummy';
+import { startBackup } from './service/start-backup';
+import { serverStatus } from './service/server-status';
 
 export class Commands {
   constructor() {}
@@ -22,6 +24,23 @@ export class Commands {
     try {
       await new DiscordRoleGuard().isAdmin(interaction);
       await sendMessageInServerWithCommand(interaction);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async startBackup(interaction: CommandInteraction) {
+    try {
+      await new DiscordRoleGuard().isAdmin(interaction);
+      await startBackup(interaction);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async serverStatus(interaction: CommandInteraction) {
+    try {
+      await serverStatus(interaction);
     } catch (error) {
       console.log(error);
     }

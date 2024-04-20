@@ -18,6 +18,11 @@ jobs:
       SERVER_ID: ${{ vars.SERVER_ID }}
       DATABASE_URL: ${{ vars.DATABASE_URL }}
       JWT_SECRET: ${{ vars.JWT_SECRET }}
+      MINECRAFT_SERVER_IP: ${{ vars.MINECRAFT_SERVER_IP }}
+      MINECRAFT_SERVER_PORT: ${{ vars.MINECRAFT_SERVER_PORT }}
+      MINECRAFT_MANAGER_PORT: ${{ vars.MINECRAFT_MANAGER_PORT }}
+      MINECRAFT_MANAGER_TOKEN: ${{ vars.MINECRAFT_MANAGER_TOKEN }}
+      MINECRAFT_ANNOUNCE_CHANNEL_ID: ${{ vars.MINECRAFT_ANNOUNCE_CHANNEL_ID }}
 
     steps:
       - name: Checkout code
@@ -50,5 +55,10 @@ jobs:
           sed -i "s|ENV_ADMIN_ROLES|$ADMIN_ROLES|g" resources.yaml
           sed -i "s|ENV_SERVER_ID|$SERVER_ID|g" resources.yaml
           sed -i "s|ENV_DATABASE_URL|$DATABASE_URL|g" resources.yaml
-          sed -i "s|ENV_JWT_SECRET|$JWT_SECRET|g" resources.yaml         
+          sed -i "s|ENV_JWT_SECRET|$JWT_SECRET|g" resources.yaml   
+          sed -i "s|ENV_MINECRAFT_SERVER_IP|$MINECRAFT_SERVER_IP|g" resources.yaml
+          sed -i "s|ENV_MINECRAFT_SERVER_PORT|$MINECRAFT_SERVER_PORT|g" resources.yaml
+          sed -i "s|ENV_MINECRAFT_MANAGER_PORT|$MINECRAFT_MANAGER_PORT|g" resources.yaml
+          sed -i "s|ENV_MINECRAFT_MANAGER_TOKEN|$MINECRAFT_MANAGER_TOKEN|g" resources.yaml
+          sed -i "s|ENV_MINECRAFT_ANNOUNCE_CHANNEL_ID|$MINECRAFT_ANNOUNCE_CHANNEL_ID|g" resources.yaml      
           kubectl apply -f resources.yaml

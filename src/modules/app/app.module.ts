@@ -6,14 +6,18 @@ import { BobModule } from '../bob/bob.module';
 import { PrismaModule } from 'src/prisma/prisma.module';
 import { UserModule } from '../user/user.module';
 import { CounterModule } from '../counter/counter.module';
+import { MinecraftModule } from '../minecraft/minecraft.module';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports: [
+    ConfigModule.forRoot(),
+    ScheduleModule.forRoot(),
     BobModule,
     UserModule,
-    ConfigModule.forRoot(),
     PrismaModule,
     CounterModule,
+    MinecraftModule,   
   ],
   controllers: [AppController],
   providers: [AppService],

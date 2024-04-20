@@ -5,5 +5,6 @@ import { BobService } from './bob.service';
 @Module({
   controllers: [BobController],
   providers: [BobService],
+  exports: [BobService],
 })
 export class BobModule {}
