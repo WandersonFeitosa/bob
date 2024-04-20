@@ -63,7 +63,7 @@ export class MinecraftService {
     });
 
     if (serverResponse) {
-      if (dbServerStatus.status !== 'online') {
+      if (dbServerStatus.status !== 'online' && dbServerStatus.status !== 'backup') {
         this.bobService.sendServerMessage({
           channelId: this.announceChannelId,
           message: `O servidor está online`,

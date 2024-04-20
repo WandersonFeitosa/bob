@@ -20,7 +20,7 @@ export async function startBackup(interaction: CommandInteraction) {
         id: server.id,
       },
       data: {
-        status: 'stopped',
+        status: 'backup',
       },
     });
 
