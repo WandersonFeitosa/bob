@@ -8,7 +8,7 @@ export class MinecraftController {
   constructor(private readonly minecraftService: MinecraftService) {}
 
   @Get('/health')
-  @Cron(CronExpression.EVERY_10_SECONDS)
+  @Cron(CronExpression.EVERY_30_SECONDS)
   async health() {
     return await this.minecraftService.health();
   }
