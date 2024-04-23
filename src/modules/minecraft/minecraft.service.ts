@@ -63,7 +63,10 @@ export class MinecraftService {
     });
 
     if (serverResponse) {
-      if (dbServerStatus.status !== 'online' && dbServerStatus.status !== 'backup') {
+      if (
+        dbServerStatus.status !== 'online' &&
+        dbServerStatus.status !== 'backup'
+      ) {
         this.bobService.sendServerMessage({
           channelId: this.announceChannelId,
           message: `O servidor está online`,
@@ -175,6 +178,64 @@ export class MinecraftService {
     } catch (error) {
       console.log(error);
       throw new HttpException(error, 500);
+    }
+  }
+
+  async updateStatus(dto: { status: string }): Promise<void> {
+    try {
+      const dbServerStatus = await this.prisma.minecraftServerStatus.findFirst({
+        where: {
+          ip: this.serverIp,
+          port: this.serverPort,
+        },
+      });
+
+      await this.prisma.minecraftServerStatus.update({
+        where: {
+          id: dbServerStatus.id,
+        },
+        data: {
+          status: dto.status,
+        },
+      });
+      return;
+    } catch (error) {
+      console.log(error);
+      throw new HttpException(error, 500);
+    }
+  }
+
+  async startBackup(): Promise<void> {
+    try {
+      const server = await this.prisma.minecraftServerStatus.findFirst({
+        where: {
+          ip: this.serverIp,
+          port: this.serverPort,
+        },
+      });
+
+      await this.prisma.minecraftServerStatus.update({
+        where: {
+          id: server.id,
+        },
+        data: {
+          status: 'backup',
+        },
+      });
+
+      const response = await axios.get(
+        `http://${this.serverIp}:${this.managerPort}/startBackup`,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${process.env.MINECRAFT_MANAGER_TOKEN}`,
+          },
+        },
+      );
+
+      return response.data.message;
+    } catch (error) {
+      console.log(error);
     }
   }
 }

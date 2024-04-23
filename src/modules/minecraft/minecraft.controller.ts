@@ -1,4 +1,4 @@
-import { Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Patch, Post } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
 
 import { MinecraftService } from './minecraft.service';
@@ -11,6 +11,17 @@ export class MinecraftController {
   @Cron(CronExpression.EVERY_30_SECONDS)
   async health() {
     return await this.minecraftService.health();
+  }
+
+  @Patch('/update-status')
+  async updateStatus(@Body() dto: { status: string }) {
+    return await this.minecraftService.updateStatus(dto);
+  }
+
+  @Post('/start-backup')
+  @Cron('0 7 * * *')
+  async startBackup() {
+    return await this.minecraftService.startBackup();
   }
 
   @Post('/start')
