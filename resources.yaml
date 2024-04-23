@@ -31,6 +31,15 @@ spec:
           image: us-central1-docker.pkg.dev/GOOGLE_PROJECT/bob/nest
           ports:
             - containerPort: 3000
+          resources:
+            requests:
+              memory: 256Mi
+              cpu: 100m
+              ephemeral-storage: 1Gi
+            limits:
+              memory: 256Mi
+              cpu: 200m
+              ephemeral-storage: 1Gi
           env:
             - name: CLIENT_ID
               value: ENV_CLIENT_ID
