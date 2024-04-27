@@ -16,8 +16,14 @@ export class Commands {
   ana(interaction: CommandInteraction) {
     ana(interaction);
   }
-  startServer(interaction: CommandInteraction) {
-    startServer(interaction);
+  
+  async startServer(interaction: CommandInteraction) {
+    try {
+      await new DiscordRoleGuard().isAdmin(interaction);
+      startServer(interaction);
+    } catch (error) {
+      console.log(error);
+    }    
   }
 
   async sendServerMessage(interaction: CommandInteraction) {

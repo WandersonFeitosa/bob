@@ -42,8 +42,12 @@ async function startDiscordConnection() {
   });
 
   client.on(Events.InteractionCreate, async (interaction: Interaction) => {
-    if (!interaction.isChatInputCommand()) return;
-    commandsObject[interaction.commandName].function(interaction);
+    try {
+      if (!interaction.isChatInputCommand()) return;
+      commandsObject[interaction.commandName].function(interaction);
+    } catch (error) {
+      console.log(error);
+    }
   });
 }
 
