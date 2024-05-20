@@ -50,12 +50,12 @@ jobs:
 
       - name: delete the old workload
         run: |
-          gcloud container clusters get-credentials autopilot-cluster-1 --region us-central1
+          gcloud container clusters get-credentials hosts-cluster-1 --region us-central1
           kubectl delete -f resources.yaml
 
       - name: deploy to GKE
         run: |
-          gcloud container clusters get-credentials autopilot-cluster-1 --region us-central1
+          gcloud container clusters get-credentials hosts-cluster-1 --region us-central1
           sed -i "s|GOOGLE_PROJECT|$GOOGLE_PROJECT|g" resources.yaml
           sed -i "s|ENV_CLIENT_ID|$CLIENT_ID|g" resources.yaml
           sed -i "s|ENV_CLIENT_SECRET|$CLIENT_SECRET|g" resources.yaml
