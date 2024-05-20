@@ -2,21 +2,24 @@ import { BobService } from 'src/modules/bob/bob.service';
 import { Commands } from './commands.controller';
 import { MinecraftService } from 'src/modules/minecraft/minecraft.service';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { FileService } from 'src/modules/file/file.service';
+import {
+  ApplicationCommandOptionType,
+  CommandInteractionOption,
+} from 'discord.js';
 
-interface Command {
-  name: string;
+interface Command extends Partial<CommandInteractionOption> {
+  type?: ApplicationCommandOptionType;
   description: string;
-  function: (...args: any[]) => any;
+  function: Function;
   options?: CommandOptions[];
 }
-interface CommandOptions {
+
+type CommandOptions = Omit<Command, 'function'> & {
+  type: ApplicationCommandOptionType;
   name: string;
-  description: string;
-  type: number;
   required?: boolean;
-  choices?: any[];
-  options?: any[];
-}
+};
 
 const commands: Command[] = [
   {
@@ -68,6 +71,25 @@ const commands: Command[] = [
     description: 'Comando de teste',
     function: new Commands().dummy,
   },
+  {
+    name: 'enviar-arte',
+    description: 'Envie sua arte para o servidor',
+    function: new Commands().submitArt,
+    options: [
+      {
+        name: 'titulo',
+        description: 'Título da arte',
+        type: 3,
+        required: true,
+      },
+      {
+        name: 'imagem',
+        description: 'Arquivo da arte',
+        type: 11,
+        required: true,
+      },
+    ],
+  },
 ];
 
 function buildCommandsObject(commands: Command[]): Record<string, Command> {
@@ -83,5 +105,13 @@ const commandsObject = buildCommandsObject(commands);
 const prisma = new PrismaService();
 const bobService = new BobService();
 const minecraftService = new MinecraftService(prisma, bobService);
+const fileService = new FileService();
 
-export { commandsObject, commands, prisma, bobService, minecraftService };
+export {
+  commandsObject,
+  commands,
+  prisma,
+  bobService,
+  minecraftService,
+  fileService,
+};

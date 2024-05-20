@@ -7,6 +7,7 @@ import { DiscordRoleGuard } from 'src/guard/discord-role.guard';
 import { dummy } from './service/dummy';
 import { startBackup } from './service/start-backup';
 import { serverStatus } from './service/server-status';
+import { submitArt } from './service/submit-art';
 
 export class Commands {
   constructor() {}
@@ -16,14 +17,14 @@ export class Commands {
   ana(interaction: CommandInteraction) {
     ana(interaction);
   }
-  
+
   async startServer(interaction: CommandInteraction) {
     try {
       await new DiscordRoleGuard().isAdmin(interaction);
       startServer(interaction);
     } catch (error) {
       console.log(error);
-    }    
+    }
   }
 
   async sendServerMessage(interaction: CommandInteraction) {
@@ -54,5 +55,9 @@ export class Commands {
 
   async dummy(interaction: CommandInteraction) {
     dummy(interaction);
+  }
+
+  async submitArt(interaction: CommandInteraction) {
+    submitArt(interaction);
   }
 }

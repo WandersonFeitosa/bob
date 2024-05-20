@@ -77,3 +77,19 @@ model MinecraftServerStatus {
 
   @@map("db_minecraft_server_status")
 }
+
+model TcsmpArts{
+  id     String @id @default(uuid())
+  name   String
+  image  String
+  uploadedBy String
+  messageId String @unique
+  status String
+
+  create_at DateTime @default(now())
+  update_at DateTime @updatedAt
+  update_by String?
+  delete    Boolean  @default(false)
+
+  @@map("db_tcsmp_arts")
+}

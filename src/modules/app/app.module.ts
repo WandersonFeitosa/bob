@@ -8,6 +8,7 @@ import { UserModule } from '../user/user.module';
 import { CounterModule } from '../counter/counter.module';
 import { MinecraftModule } from '../minecraft/minecraft.module';
 import { ScheduleModule } from '@nestjs/schedule';
+import { FileModule } from '../file/file.module';
 
 @Module({
   imports: [
@@ -17,7 +18,8 @@ import { ScheduleModule } from '@nestjs/schedule';
     UserModule,
     PrismaModule,
     CounterModule,
-    MinecraftModule,   
+    MinecraftModule,
+    FileModule,
   ],
   controllers: [AppController],
   providers: [AppService],

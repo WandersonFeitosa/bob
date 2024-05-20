@@ -206,6 +206,7 @@ export class MinecraftService {
   }
 
   async startBackup(): Promise<void> {
+    console.log('Starting backup');
     try {
       const server = await this.prisma.minecraftServerStatus.findFirst({
         where: {

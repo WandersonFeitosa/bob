@@ -38,7 +38,7 @@ spec:
               ephemeral-storage: 1Gi
             limits:
               memory: 256Mi
-              cpu: 150m
+              cpu: 100m
               ephemeral-storage: 1Gi
           env:
             - name: CLIENT_ID
@@ -65,3 +65,9 @@ spec:
               value: ENV_MINECRAFT_MANAGER_TOKEN
             - name: MINECRAFT_ANNOUNCE_CHANNEL_ID
               value: ENV_MINECRAFT_ANNOUNCE_CHANNEL_ID
+            - name: PROJECT_ID
+              value: ENV_PROJECT_ID
+            - name: BUCKET_NAME
+              value: ENV_BUCKET_NAME
+            - name: APPROVE_ARTS_CHANNEL_ID
+              value: ENV_APPROVE_ARTS_CHANNEL_ID
