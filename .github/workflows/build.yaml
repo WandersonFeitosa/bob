@@ -9,7 +9,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      PROJECT_NAME: ${{ github.repository }}
+      PROJECT_NAME: "bob"
       GOOGLE_APPLICATION_CREDENTIALS: ${{ vars.GOOGLE_APPLICATION_CREDENTIALS }}
       GOOGLE_PROJECT: ${{ vars.GOOGLE_PROJECT }}
       CLUSTER_NAME: ${{ vars.CLUSTER_NAME }}
@@ -48,8 +48,8 @@ jobs:
       - name: build and push the docker image
         run: |
           gcloud auth configure-docker us-central1-docker.pkg.dev
-          docker build -t us-central1-docker.pkg.dev/$GOOGLE_PROJECT/$PROJECT_NAME/nest .
-          docker push us-central1-docker.pkg.dev/$GOOGLE_PROJECT/$PROJECT_NAME/nest
+          docker build -t us-central1-docker.pkg.dev/$GOOGLE_PROJECT/$PROJECT_NAME/bot .
+          docker push us-central1-docker.pkg.dev/$GOOGLE_PROJECT/$PROJECT_NAME/bot
 
       - name: deploy to GKE
         run: |
