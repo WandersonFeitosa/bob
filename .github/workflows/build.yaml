@@ -48,12 +48,13 @@ jobs:
       - name: build and push the docker image
         run: |
           gcloud auth configure-docker us-central1-docker.pkg.dev
-          docker build -t us-central1-docker.pkg.dev/$GOOGLE_PROJECT/$PROJECT_NAME/bot .
-          docker push us-central1-docker.pkg.dev/$GOOGLE_PROJECT/$PROJECT_NAME/bot
+          docker build -t us-central1-docker.pkg.dev/$GOOGLE_PROJECT/$PROJECT_NAME .
+          docker push us-central1-docker.pkg.dev/$GOOGLE_PROJECT/$PROJECT_NAME
 
       - name: deploy to GKE
         run: |
           gcloud container clusters get-credentials $CLUSTER_NAME --region $CLUSTER_REGION
+          sed -i "s|PROJECT_NAME|$PROJECT_NAME|g" resources.yaml
           sed -i "s|GOOGLE_PROJECT|$GOOGLE_PROJECT|g" resources.yaml
           sed -i "s|ENV_CLIENT_ID|$CLIENT_ID|g" resources.yaml
           sed -i "s|ENV_CLIENT_SECRET|$CLIENT_SECRET|g" resources.yaml
