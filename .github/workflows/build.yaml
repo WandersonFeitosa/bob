@@ -12,6 +12,7 @@ jobs:
       GOOGLE_APPLICATION_CREDENTIALS: ${{ vars.GOOGLE_APPLICATION_CREDENTIALS }}
       GOOGLE_PROJECT: ${{ vars.GOOGLE_PROJECT }}
       CLUSTER_NAME: ${{ vars.CLUSTER_NAME }}
+      CLUSTER_REGION: ${{ vars.CLUSTER_REGION }}
       CLIENT_ID: ${{ vars.CLIENT_ID }}
       CLIENT_SECRET: ${{ vars.CLIENT_SECRET }}
       DISCORD_TOKEN: ${{ vars.DISCORD_TOKEN }}
@@ -51,12 +52,12 @@ jobs:
 
       - name: delete the old workload only if it exists
         run: |
-          gcloud container clusters get-credentials $CLUSTER_NAME --region us-central1
+          gcloud container clusters get-credentials $CLUSTER_NAME --region $CLUSTER_REGION
           kubectl delete -f resources.yaml
 
       - name: deploy to GKE
         run: |
-          gcloud container clusters get-credentials $CLUSTER_NAME --region us-central1
+          gcloud container clusters get-credentials $CLUSTER_NAME --region $CLUSTER_REGION
           sed -i "s|GOOGLE_PROJECT|$GOOGLE_PROJECT|g" resources.yaml
           sed -i "s|ENV_CLIENT_ID|$CLIENT_ID|g" resources.yaml
           sed -i "s|ENV_CLIENT_SECRET|$CLIENT_SECRET|g" resources.yaml
