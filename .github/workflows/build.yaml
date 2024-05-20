@@ -50,11 +50,6 @@ jobs:
           docker build -t us-central1-docker.pkg.dev/$GOOGLE_PROJECT/bob/nest .
           docker push us-central1-docker.pkg.dev/$GOOGLE_PROJECT/bob/nest
 
-      - name: delete the old workload only if it exists
-        run: |
-          gcloud container clusters get-credentials $CLUSTER_NAME --region $CLUSTER_REGION
-          kubectl delete -f resources.yaml
-
       - name: deploy to GKE
         run: |
           gcloud container clusters get-credentials $CLUSTER_NAME --region $CLUSTER_REGION
