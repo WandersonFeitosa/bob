@@ -37,9 +37,9 @@ spec:
               cpu: 100m
               ephemeral-storage: 1Gi
             limits:
-              memory: 256Mi
-              cpu: 500m
-              ephemeral-storage: 1Gi
+              memory: 512Mi
+              cpu: 300m
+              ephemeral-storage: 2Gi
           env:
             - name: CLIENT_ID
               value: ENV_CLIENT_ID
