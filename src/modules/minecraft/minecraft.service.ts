@@ -69,7 +69,7 @@ export class MinecraftService {
       ) {
         this.bobService.sendServerMessage({
           channelId: this.announceChannelId,
-          message: `O servidor está online`,
+          message: `O servidor está online 👍 `,
         });
         await this.prisma.minecraftServerStatus.update({
           where: {

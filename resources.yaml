@@ -34,12 +34,12 @@ spec:
           resources:
             requests:
               memory: 256Mi
-              cpu: 100m
-              ephemeral-storage: 600Mi
+              cpu: 250m
+              ephemeral-storage: 1Gi
             limits:
               memory: 256Mi
-              cpu: 100m
-              ephemeral-storage: 600Mi
+              cpu: 250m
+              ephemeral-storage: 1Gi
           env:
             - name: CLIENT_ID
               value: ENV_CLIENT_ID

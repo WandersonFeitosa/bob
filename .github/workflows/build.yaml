@@ -69,4 +69,4 @@ jobs:
           sed -i "s|ENV_PROJECT_ID|$PROJECT_ID|g" resources.yaml
           sed -i "s|ENV_BUCKET_NAME|$BUCKET_NAME|g" resources.yaml
           sed -i "s|ENV_APPROVE_ARTS_CHANNEL_ID|$APPROVE_ARTS_CHANNEL_ID|g" resources.yaml      
-          kubectl apply -f resources.yaml
+          kubectl apply --record -f resources.yaml
