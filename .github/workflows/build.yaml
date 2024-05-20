@@ -68,5 +68,8 @@ jobs:
           sed -i "s|ENV_MINECRAFT_SERVER_PORT|$MINECRAFT_SERVER_PORT|g" resources.yaml
           sed -i "s|ENV_MINECRAFT_MANAGER_PORT|$MINECRAFT_MANAGER_PORT|g" resources.yaml
           sed -i "s|ENV_MINECRAFT_MANAGER_TOKEN|$MINECRAFT_MANAGER_TOKEN|g" resources.yaml
-          sed -i "s|ENV_MINECRAFT_ANNOUNCE_CHANNEL_ID|$MINECRAFT_ANNOUNCE_CHANNEL_ID|g" resources.yaml      
+          sed -i "s|ENV_MINECRAFT_ANNOUNCE_CHANNEL_ID|$MINECRAFT_ANNOUNCE_CHANNEL_ID|g" resources.yaml
+          sed -i "s|ENV_PROJECT_ID|$PROJECT_ID|g" resources.yaml
+          sed -i "s|ENV_BUCKET_NAME|$BUCKET_NAME|g" resources.yaml
+          sed -i "s|ENV_APPROVE_ARTS_CHANNEL_ID|$APPROVE_ARTS_CHANNEL_ID|g" resources.yaml      
           kubectl apply -f resources.yaml
