@@ -11,6 +11,7 @@ jobs:
     env:
       GOOGLE_APPLICATION_CREDENTIALS: ${{ vars.GOOGLE_APPLICATION_CREDENTIALS }}
       GOOGLE_PROJECT: ${{ vars.GOOGLE_PROJECT }}
+      CLUSTER_NAME: ${{ vars.CLUSTER_NAME }}
       CLIENT_ID: ${{ vars.CLIENT_ID }}
       CLIENT_SECRET: ${{ vars.CLIENT_SECRET }}
       DISCORD_TOKEN: ${{ vars.DISCORD_TOKEN }}
@@ -48,14 +49,14 @@ jobs:
           docker build -t us-central1-docker.pkg.dev/$GOOGLE_PROJECT/bob/nest .
           docker push us-central1-docker.pkg.dev/$GOOGLE_PROJECT/bob/nest
 
-      - name: delete the old workload
+      - name: delete the old workload only if it exists
         run: |
-          gcloud container clusters get-credentials hosts-cluster-1 --region us-central1
+          gcloud container clusters get-credentials $CLUSTER_NAME --region us-central1
           kubectl delete -f resources.yaml
 
       - name: deploy to GKE
         run: |
-          gcloud container clusters get-credentials hosts-cluster-1 --region us-central1
+          gcloud container clusters get-credentials $CLUSTER_NAME --region us-central1
           sed -i "s|GOOGLE_PROJECT|$GOOGLE_PROJECT|g" resources.yaml
           sed -i "s|ENV_CLIENT_ID|$CLIENT_ID|g" resources.yaml
           sed -i "s|ENV_CLIENT_SECRET|$CLIENT_SECRET|g" resources.yaml
