@@ -9,6 +9,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
+      PROJECT_NAME: ${{ github.repository }}
       GOOGLE_APPLICATION_CREDENTIALS: ${{ vars.GOOGLE_APPLICATION_CREDENTIALS }}
       GOOGLE_PROJECT: ${{ vars.GOOGLE_PROJECT }}
       CLUSTER_NAME: ${{ vars.CLUSTER_NAME }}
@@ -47,8 +48,8 @@ jobs:
       - name: build and push the docker image
         run: |
           gcloud auth configure-docker us-central1-docker.pkg.dev
-          docker build -t us-central1-docker.pkg.dev/$GOOGLE_PROJECT/bob/nest .
-          docker push us-central1-docker.pkg.dev/$GOOGLE_PROJECT/bob/nest
+          docker build -t us-central1-docker.pkg.dev/$GOOGLE_PROJECT/$PROJECT_NAME/nest .
+          docker push us-central1-docker.pkg.dev/$GOOGLE_PROJECT/$PROJECT_NAME/nest
 
       - name: deploy to GKE
         run: |
@@ -70,3 +71,7 @@ jobs:
           sed -i "s|ENV_BUCKET_NAME|$BUCKET_NAME|g" resources.yaml
           sed -i "s|ENV_APPROVE_ARTS_CHANNEL_ID|$APPROVE_ARTS_CHANNEL_ID|g" resources.yaml      
           kubectl apply --record -f resources.yaml
+
+      - name: run a redepoly on the workload
+        run: |
+          kubectl rollout restart deployment $PROJECT_NAME
