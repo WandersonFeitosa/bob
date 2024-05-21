@@ -1,7 +1,7 @@
 import { CommandInteraction } from 'discord.js';
 import { minecraftService } from '../commands.module';
 
-export class CommandStartServer {
+export class DiscordStartServer {
   async handle(interaction: CommandInteraction) {
     try {
       const start = await minecraftService.startServer();

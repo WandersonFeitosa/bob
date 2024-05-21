@@ -1,26 +1,26 @@
-import { CommandInteraction, Interaction } from 'discord.js';
+import { CommandInteraction } from 'discord.js';
 import { DiscordRoleGuard } from 'src/guard/discord-role.guard';
-import { CommandAnaService } from './service/ana.service';
-import { CommandPingService } from './service/ping.service';
-import { CommandSendMessageInServerWithCommand } from './service/send-server-message.service';
-import { CommandServerStatusService } from './service/server-status.service';
-import { CommandStartBackupService } from './service/start-backup.service';
-import { CommandStartServer } from './service/start-server.service';
-import { SubmitArtService } from './service/submit-art.service';
+import { DiscordAnaService } from './service/ana.service';
+import { DiscordPingService } from './service/ping.service';
+import { DiscordSendMessageInServerWithCommand } from './service/send-server-message.service';
+import { DiscordServerStatusService } from './service/server-status.service';
+import { DiscordStartBackupService } from './service/start-backup.service';
+import { DiscordStartServer } from './service/start-server.service';
+import { DiscordSubmitArtService } from './service/submit-art.service';
 
-export class Commands {
+export class Discords {
   constructor() {}
   ping(interaction: CommandInteraction) {
-    return new CommandPingService().handle(interaction);
+    return new DiscordPingService().handle(interaction);
   }
   ana(interaction: CommandInteraction) {
-    return new CommandAnaService().handle(interaction);
+    return new DiscordAnaService().handle(interaction);
   }
 
   async startServer(interaction: CommandInteraction) {
     try {
       await new DiscordRoleGuard().isAdmin(interaction);
-      return await new CommandStartServer().handle(interaction);
+      return await new DiscordStartServer().handle(interaction);
     } catch (error) {
       console.log(error);
     }
@@ -29,7 +29,7 @@ export class Commands {
   async sendServerMessage(interaction: CommandInteraction) {
     try {
       await new DiscordRoleGuard().isAdmin(interaction);
-      return await new CommandSendMessageInServerWithCommand().handle(
+      return await new DiscordSendMessageInServerWithCommand().handle(
         interaction,
       );
     } catch (error) {
@@ -40,7 +40,7 @@ export class Commands {
   async startBackup(interaction: CommandInteraction) {
     try {
       await new DiscordRoleGuard().isAdmin(interaction);
-      return await new CommandStartBackupService().handle(interaction);
+      return await new DiscordStartBackupService().handle(interaction);
     } catch (error) {
       console.log(error);
     }
@@ -48,7 +48,7 @@ export class Commands {
 
   async serverStatus(interaction: CommandInteraction) {
     try {
-      return await new CommandServerStatusService().handle(interaction);
+      return await new DiscordServerStatusService().handle(interaction);
     } catch (error) {
       console.log(error);
     }
@@ -56,7 +56,7 @@ export class Commands {
 
   async submitArt(interaction: CommandInteraction) {
     try {
-      return await new SubmitArtService().handle(interaction);
+      return await new DiscordSubmitArtService().handle(interaction);
     } catch (error) {
       console.log(error);
     }

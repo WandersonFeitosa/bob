@@ -1,7 +1,7 @@
 import { CommandInteraction } from 'discord.js';
 import { minecraftService } from '../commands.module';
 
-export class CommandServerStatusService {
+export class DiscordServerStatusService {
   async handle(interaction: CommandInteraction) {
     if (!interaction.isChatInputCommand()) return;
 

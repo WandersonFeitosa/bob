@@ -2,7 +2,7 @@ import { AttachmentBuilder, CommandInteraction } from 'discord.js';
 import { fileService, prisma } from '../commands.module';
 import { sendServerMessage } from 'src/utils/send-message-on-channel';
 
-export class SubmitArtService {
+export class DiscordSubmitArtService {
   async handle(interaction: CommandInteraction) {
     try {
       if (!interaction.isChatInputCommand()) return;

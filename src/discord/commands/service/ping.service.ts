@@ -1,6 +1,6 @@
 import { CommandInteraction } from 'discord.js';
 
-export class CommandPingService {
+export class DiscordPingService {
   handle(interaction: CommandInteraction) {
     if (!interaction.isChatInputCommand()) return;
 

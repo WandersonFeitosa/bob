@@ -1,7 +1,7 @@
 import { CommandInteraction } from 'discord.js';
 import { sendServerMessage } from 'src/utils/send-message-on-channel';
 
-export class CommandSendMessageInServerWithCommand {
+export class DiscordSendMessageInServerWithCommand {
   async handle(interaction: CommandInteraction) {
     if (!interaction.isChatInputCommand()) return;
 

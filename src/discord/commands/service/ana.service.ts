@@ -1,6 +1,6 @@
 import { CommandInteraction } from 'discord.js';
 
-export class CommandAnaService {
+export class DiscordAnaService {
   handle(interaction: CommandInteraction) {
     if (!interaction.isChatInputCommand()) return;
 
