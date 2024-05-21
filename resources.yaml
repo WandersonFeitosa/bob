@@ -71,3 +71,5 @@ spec:
               value: ENV_BUCKET_NAME
             - name: APPROVE_ARTS_CHANNEL_ID
               value: ENV_APPROVE_ARTS_CHANNEL_ID
+            - name: ARTS_PANNEL_CHANNEL_ID
+              value: ENV_ARTS_PANNEL_CHANNEL_ID
