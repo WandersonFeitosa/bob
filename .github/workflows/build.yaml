@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  build:
+  google-cloud-build-and-deploy:
     runs-on: ubuntu-latest
     env:
       PROJECT_NAME: 'bob'
