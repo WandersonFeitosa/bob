@@ -81,7 +81,7 @@ export class MinecraftService {
         });
       }
 
-      console.log('Server status 👍:', dbServerStatus.status);
+      console.log('Server status:', dbServerStatus.status);
       return {
         statusCode: 200,
         message: 'O servidor está online',
