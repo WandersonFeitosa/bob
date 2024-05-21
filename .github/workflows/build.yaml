@@ -6,11 +6,32 @@ on:
       - main
 
 jobs:
-  google-cloud-install-and-auth:
+  build:
     runs-on: ubuntu-latest
     env:
+      PROJECT_NAME: 'bob'
+      IMAGE_NAME: 'bot'
       GOOGLE_APPLICATION_CREDENTIALS: ${{ vars.GOOGLE_APPLICATION_CREDENTIALS }}
       GOOGLE_PROJECT: ${{ vars.GOOGLE_PROJECT }}
+      CLUSTER_NAME: ${{ vars.CLUSTER_NAME }}
+      CLUSTER_REGION: ${{ vars.CLUSTER_REGION }}
+      CLIENT_ID: ${{ vars.CLIENT_ID }}
+      CLIENT_SECRET: ${{ vars.CLIENT_SECRET }}
+      DISCORD_TOKEN: ${{ vars.DISCORD_TOKEN }}
+      ADMIN_ROLES: ${{ vars.ADMIN_ROLES }}
+      SERVER_ID: ${{ vars.SERVER_ID }}
+      DATABASE_URL: ${{ vars.DATABASE_URL }}
+      JWT_SECRET: ${{ vars.JWT_SECRET }}
+      MINECRAFT_SERVER_IP: ${{ vars.MINECRAFT_SERVER_IP }}
+      MINECRAFT_SERVER_PORT: ${{ vars.MINECRAFT_SERVER_PORT }}
+      MINECRAFT_MANAGER_PORT: ${{ vars.MINECRAFT_MANAGER_PORT }}
+      MINECRAFT_MANAGER_TOKEN: ${{ vars.MINECRAFT_MANAGER_TOKEN }}
+      MINECRAFT_ANNOUNCE_CHANNEL_ID: ${{ vars.MINECRAFT_ANNOUNCE_CHANNEL_ID }}
+      PROJECT_ID: ${{ vars.PROJECT_ID }}
+      BUCKET_NAME: ${{ vars.BUCKET_NAME }}
+      APPROVE_ARTS_CHANNEL_ID: ${{ vars.APPROVE_ARTS_CHANNEL_ID }}
+      ARTS_PANNEL_CHANNEL_ID: ${{ vars.ARTS_PANNEL_CHANNEL_ID }}
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -20,73 +41,19 @@ jobs:
         with:
           credentials_json: ${{ vars.GOOGLE_APPLICATION_CREDENTIALS }}
 
-      - name: install the gcloud cli
+      - name: Gcloud cli setup
         uses: google-github-actions/setup-gcloud@v2
         with:
           project_id: ${{ vars.GOOGLE_PROJECT }}
           install_components: 'gke-gcloud-auth-plugin'
 
-  build-to-artifact-registry:
-    runs-on: ubuntu-latest
-    needs: google-cloud-install-and-auth
-    env:
-      PROJECT_NAME: 'bob'
-      IMAGE_NAME: 'bot'
-      GOOGLE_APPLICATION_CREDENTIALS: ${{ needs.authentication.outputs.credentials_json }}
-      GOOGLE_PROJECT: ${{ vars.GOOGLE_PROJECT }}
-      CLUSTER_NAME: ${{ vars.CLUSTER_NAME }}
-      CLUSTER_REGION: ${{ vars.CLUSTER_REGION }}
-      CLIENT_ID: ${{ vars.CLIENT_ID }}
-      CLIENT_SECRET: ${{ vars.CLIENT_SECRET }}
-      DISCORD_TOKEN: ${{ vars.DISCORD_TOKEN }}
-      ADMIN_ROLES: ${{ vars.ADMIN_ROLES }}
-      SERVER_ID: ${{ vars.SERVER_ID }}
-      DATABASE_URL: ${{ vars.DATABASE_URL }}
-      JWT_SECRET: ${{ vars.JWT_SECRET }}
-      MINECRAFT_SERVER_IP: ${{ vars.MINECRAFT_SERVER_IP }}
-      MINECRAFT_SERVER_PORT: ${{ vars.MINECRAFT_SERVER_PORT }}
-      MINECRAFT_MANAGER_PORT: ${{ vars.MINECRAFT_MANAGER_PORT }}
-      MINECRAFT_MANAGER_TOKEN: ${{ vars.MINECRAFT_MANAGER_TOKEN }}
-      MINECRAFT_ANNOUNCE_CHANNEL_ID: ${{ vars.MINECRAFT_ANNOUNCE_CHANNEL_ID }}
-      PROJECT_ID: ${{ vars.PROJECT_ID }}
-      BUCKET_NAME: ${{ vars.BUCKET_NAME }}
-      APPROVE_ARTS_CHANNEL_ID: ${{ vars.APPROVE_ARTS_CHANNEL_ID }}
-      ARTS_PANNEL_CHANNEL_ID: ${{ vars.ARTS_PANNEL_CHANNEL_ID }}
-    steps:
-      - name: build and push the docker image
+      - name: Docker build and push
         run: |
           gcloud auth configure-docker us-central1-docker.pkg.dev
           docker build -t us-central1-docker.pkg.dev/$GOOGLE_PROJECT/$PROJECT_NAME/$IMAGE_NAME .
           docker push us-central1-docker.pkg.dev/$GOOGLE_PROJECT/$PROJECT_NAME/$IMAGE_NAME
 
-  deploy-to-gke:
-    runs-on: ubuntu-latest
-    needs: build-to-artifact-registry
-    env:
-      PROJECT_NAME: 'bob'
-      IMAGE_NAME: 'bot'
-      GOOGLE_APPLICATION_CREDENTIALS: ${{ needs.authentication.outputs.credentials_json }}
-      GOOGLE_PROJECT: ${{ vars.GOOGLE_PROJECT }}
-      CLUSTER_NAME: ${{ vars.CLUSTER_NAME }}
-      CLUSTER_REGION: ${{ vars.CLUSTER_REGION }}
-      CLIENT_ID: ${{ vars.CLIENT_ID }}
-      CLIENT_SECRET: ${{ vars.CLIENT_SECRET }}
-      DISCORD_TOKEN: ${{ vars.DISCORD_TOKEN }}
-      ADMIN_ROLES: ${{ vars.ADMIN_ROLES }}
-      SERVER_ID: ${{ vars.SERVER_ID }}
-      DATABASE_URL: ${{ vars.DATABASE_URL }}
-      JWT_SECRET: ${{ vars.JWT_SECRET }}
-      MINECRAFT_SERVER_IP: ${{ vars.MINECRAFT_SERVER_IP }}
-      MINECRAFT_SERVER_PORT: ${{ vars.MINECRAFT_SERVER_PORT }}
-      MINECRAFT_MANAGER_PORT: ${{ vars.MINECRAFT_MANAGER_PORT }}
-      MINECRAFT_MANAGER_TOKEN: ${{ vars.MINECRAFT_MANAGER_TOKEN }}
-      MINECRAFT_ANNOUNCE_CHANNEL_ID: ${{ vars.MINECRAFT_ANNOUNCE_CHANNEL_ID }}
-      PROJECT_ID: ${{ vars.PROJECT_ID }}
-      BUCKET_NAME: ${{ vars.BUCKET_NAME }}
-      APPROVE_ARTS_CHANNEL_ID: ${{ vars.APPROVE_ARTS_CHANNEL_ID }}
-      ARTS_PANNEL_CHANNEL_ID: ${{ vars.ARTS_PANNEL_CHANNEL_ID }}
-    steps:
-      - name: deploy to GKE
+      - name: Kubectl setup
         run: |
           gcloud container clusters get-credentials $CLUSTER_NAME --region $CLUSTER_REGION
           sed -i "s|PROJECT_NAME|$PROJECT_NAME|g" resources.yaml
@@ -108,8 +75,8 @@ jobs:
           sed -i "s|ENV_BUCKET_NAME|$BUCKET_NAME|g" resources.yaml
           sed -i "s|ENV_APPROVE_ARTS_CHANNEL_ID|$APPROVE_ARTS_CHANNEL_ID|g" resources.yaml  
           sed -i "s|ENV_ARTS_PANNEL_CHANNEL_ID|$ARTS_PANNEL_CHANNEL_ID|g" resources.yaml    
-          kubectl apply --record-f resources.yaml
+          kubectl apply --record -f resources.yaml
 
-      - name: run a redeploy on the workload
+      - name: Restart deployment
         run: |
           kubectl rollout restart deployment $PROJECT_NAME
