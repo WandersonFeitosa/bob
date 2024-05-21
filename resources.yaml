@@ -28,7 +28,7 @@ spec:
     spec:
       containers:
         - name: bob
-          image: us-central1-docker.pkg.dev/GOOGLE_PROJECT/PROJECT_NAME
+          image: us-central1-docker.pkg.dev/GOOGLE_PROJECT/PROJECT_NAME/IMAGE_NAME
           ports:
             - containerPort: 3000
           resources:
