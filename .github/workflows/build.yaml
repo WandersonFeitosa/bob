@@ -56,8 +56,8 @@ jobs:
       - name: build and push the docker image
         run: |
           gcloud auth configure-docker us-central1-docker.pkg.dev
-          docker build -t us-central1-docker.pkg.dev/$GOOGLE_PROJECT/$PROJECT_NAME/$IMAGE_NAME .
-          docker push us-central1-docker.pkg.dev/$GOOGLE_PROJECT/$PROJECT_NAME/$IMAGE_NAME
+          docker build -t us-central1-docker.pkg.dev$GOOGLE_PROJECT/$PROJECT_NAME/$IMAGE_NAME .
+          docker push us-central1-docker.pkg.dev$GOOGLE_PROJECT/$PROJECT_NAME/$IMAGE_NAME
 
   deploy-to-gke:
     runs-on: ubuntu-latest
