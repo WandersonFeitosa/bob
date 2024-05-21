@@ -9,7 +9,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      PROJECT_NAME: "bob"
+      PROJECT_NAME: 'bob'
+      IMAGE_NAME: 'bot'
       GOOGLE_APPLICATION_CREDENTIALS: ${{ vars.GOOGLE_APPLICATION_CREDENTIALS }}
       GOOGLE_PROJECT: ${{ vars.GOOGLE_PROJECT }}
       CLUSTER_NAME: ${{ vars.CLUSTER_NAME }}
@@ -48,13 +49,14 @@ jobs:
       - name: build and push the docker image
         run: |
           gcloud auth configure-docker us-central1-docker.pkg.dev
-          docker build -t us-central1-docker.pkg.dev/$GOOGLE_PROJECT/$PROJECT_NAME .
-          docker push us-central1-docker.pkg.dev/$GOOGLE_PROJECT/$PROJECT_NAME
+          docker build -t us-central1-docker.pkg.dev/$GOOGLE_PROJECT/$PROJECT_NAME/$IMAGE_NAME .
+          docker push us-central1-docker.pkg.dev/$GOOGLE_PROJECT/$PROJECT_NAME/$IMAGE_NAME
 
       - name: deploy to GKE
         run: |
           gcloud container clusters get-credentials $CLUSTER_NAME --region $CLUSTER_REGION
           sed -i "s|PROJECT_NAME|$PROJECT_NAME|g" resources.yaml
+          sed -i "s|IMAGE_NAME|$IMAGE_NAME|g" resources.yaml
           sed -i "s|GOOGLE_PROJECT|$GOOGLE_PROJECT|g" resources.yaml
           sed -i "s|ENV_CLIENT_ID|$CLIENT_ID|g" resources.yaml
           sed -i "s|ENV_CLIENT_SECRET|$CLIENT_SECRET|g" resources.yaml
