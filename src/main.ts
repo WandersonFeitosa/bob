@@ -12,7 +12,7 @@ import {
 import { commands, commandsObject } from './discord/commands/commands.module';
 import { ValidationPipe } from '@nestjs/common';
 import { NextFunction, Request, Response } from 'express';
-import { EventsModule } from './discord/events/events.module';
+import { DiscordEventsModule } from './discord/events/events.module';
 
 export const client = new Client({
   intents: [
@@ -62,7 +62,7 @@ async function startDiscordConnection() {
   });
 
   client.on(Events.MessageReactionAdd, async (reaction, user) => {
-    await new EventsModule().reactionAdd(reaction, user);
+    await new DiscordEventsModule().reactionAdd(reaction, user);
   });
 }
 

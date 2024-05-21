@@ -8,7 +8,7 @@ import { DiscordStartBackupService } from './service/start-backup.service';
 import { DiscordStartServer } from './service/start-server.service';
 import { DiscordSubmitArtService } from './service/submit-art.service';
 
-export class Discords {
+export class DiscordCommandsController {
   constructor() {}
   ping(interaction: CommandInteraction) {
     return new DiscordPingService().handle(interaction);

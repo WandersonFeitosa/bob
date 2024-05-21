@@ -1,8 +1,11 @@
 import { AttachmentBuilder, CommandInteraction } from 'discord.js';
-import { fileService, prisma } from '../commands.module';
 import { sendServerMessage } from 'src/utils/send-message-on-channel';
+import { NestServices } from 'src/discord/nest-services';
 
 export class DiscordSubmitArtService {
+  private prismaService = new NestServices().prisma;
+  private fileService = new NestServices().fileService;
+
   async handle(interaction: CommandInteraction) {
     try {
       if (!interaction.isChatInputCommand()) return;
@@ -27,7 +30,7 @@ export class DiscordSubmitArtService {
       const arrayBuffer = await donwloadAttachment.arrayBuffer();
       const attachmentBuffer = Buffer.from(arrayBuffer);
 
-      const uploadResult = await fileService.uploadFile({
+      const uploadResult = await this.fileService.uploadFile({
         name: attachment.name,
         buffer: attachmentBuffer,
       });
@@ -46,7 +49,7 @@ export class DiscordSubmitArtService {
 
       const messageId = sentMessage.id;
 
-      await prisma.tcsmpArts.create({
+      await this.prismaService.tcsmpArts.create({
         data: {
           name: artTitle,
           image: url,

@@ -1,12 +1,8 @@
-import { BobService } from 'src/modules/bob/bob.service';
-import { Commands } from './commands.controller';
-import { MinecraftService } from 'src/modules/minecraft/minecraft.service';
-import { PrismaService } from 'src/prisma/prisma.service';
-import { FileService } from 'src/modules/file/file.service';
 import {
   ApplicationCommandOptionType,
   CommandInteractionOption,
 } from 'discord.js';
+import { DiscordCommandsController } from './commands.controller';
 
 interface Command extends Partial<CommandInteractionOption> {
   type?: ApplicationCommandOptionType;
@@ -25,22 +21,22 @@ const commands: Command[] = [
   {
     name: 'ping',
     description: 'Pong',
-    function: new Commands().ping,
+    function: new DiscordCommandsController().ping,
   },
   {
     name: 'ana',
     description: 'Ana',
-    function: new Commands().ana,
+    function: new DiscordCommandsController().ana,
   },
   {
     name: 'ligar-servidor',
     description: 'Inicia o servidor caso ele esteja offline',
-    function: new Commands().startServer,
+    function: new DiscordCommandsController().startServer,
   },
   {
     name: 'enviar-mensagem',
     description: 'Envia uma mensagem para um canal',
-    function: new Commands().sendServerMessage,
+    function: new DiscordCommandsController().sendServerMessage,
     options: [
       {
         name: 'mensagem',
@@ -59,17 +55,17 @@ const commands: Command[] = [
   {
     name: 'backup',
     description: 'Inicia um backup do servidor',
-    function: new Commands().startBackup,
+    function: new DiscordCommandsController().startBackup,
   },
   {
     name: 'status',
     description: 'Mostra o status do servidor',
-    function: new Commands().serverStatus,
+    function: new DiscordCommandsController().serverStatus,
   },
   {
     name: 'enviar-arte',
     description: 'Envie sua arte para o servidor',
-    function: new Commands().submitArt,
+    function: new DiscordCommandsController().submitArt,
     options: [
       {
         name: 'titulo',
@@ -97,16 +93,4 @@ function buildCommandsObject(commands: Command[]): Record<string, Command> {
 
 const commandsObject = buildCommandsObject(commands);
 
-const prisma = new PrismaService();
-const bobService = new BobService();
-const minecraftService = new MinecraftService(prisma, bobService);
-const fileService = new FileService();
-
-export {
-  commandsObject,
-  commands,
-  prisma,
-  bobService,
-  minecraftService,
-  fileService,
-};
+export { commandsObject, commands };
