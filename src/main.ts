@@ -5,14 +5,25 @@ import {
   Events,
   GatewayIntentBits,
   Interaction,
+  Partials,
   REST,
   Routes,
 } from 'discord.js';
-import { commands, commandsObject } from './commands/commands.module';
+import { commands, commandsObject } from './discord/commands/commands.module';
 import { ValidationPipe } from '@nestjs/common';
 import { NextFunction, Request, Response } from 'express';
+import { EventsModule } from './discord/events/events.module';
 
-export const client = new Client({ intents: [GatewayIntentBits.Guilds] });
+export const client = new Client({
+  intents: [
+    GatewayIntentBits.Guilds,
+    GatewayIntentBits.GuildMessages,
+    GatewayIntentBits.GuildMessageReactions,
+    GatewayIntentBits.GuildMembers,
+    GatewayIntentBits.GuildVoiceStates,
+  ],
+  partials: [Partials.Message, Partials.Channel, Partials.Reaction],
+});
 const token = process.env.DISCORD_TOKEN;
 const client_id = process.env.CLIENT_ID;
 
@@ -44,10 +55,14 @@ async function startDiscordConnection() {
   client.on(Events.InteractionCreate, async (interaction: Interaction) => {
     try {
       if (!interaction.isChatInputCommand()) return;
-      commandsObject[interaction.commandName].function(interaction);
+      return commandsObject[interaction.commandName].function(interaction);
     } catch (error) {
       console.log(error);
     }
+  });
+
+  client.on(Events.MessageReactionAdd, async (reaction, user) => {
+    await new EventsModule().reactionAdd(reaction, user);
   });
 }
 

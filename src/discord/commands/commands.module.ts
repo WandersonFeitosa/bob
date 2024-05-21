@@ -67,11 +67,6 @@ const commands: Command[] = [
     function: new Commands().serverStatus,
   },
   {
-    name: 'dummy',
-    description: 'Comando de teste',
-    function: new Commands().dummy,
-  },
-  {
     name: 'enviar-arte',
     description: 'Envie sua arte para o servidor',
     function: new Commands().submitArt,
