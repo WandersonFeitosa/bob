@@ -73,3 +73,5 @@ spec:
               value: ENV_APPROVE_ARTS_CHANNEL_ID
             - name: ARTS_PANNEL_CHANNEL_ID
               value: ENV_ARTS_PANNEL_CHANNEL_ID
+            - name: NICKS_CHANNEL_ID
+              value: ENV_NICKS_CHANNEL_ID

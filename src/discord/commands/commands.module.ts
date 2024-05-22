@@ -81,6 +81,11 @@ const commands: Command[] = [
       },
     ],
   },
+  {
+    name: 'gerar-nicks',
+    description: 'Gera nicks para o servidor',
+    function: new DiscordCommandsController().generateMinecraftNicks,
+  },
 ];
 
 function buildCommandsObject(commands: Command[]): Record<string, Command> {

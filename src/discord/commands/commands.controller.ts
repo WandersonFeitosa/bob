@@ -7,6 +7,7 @@ import { DiscordServerStatusService } from './service/server-status.service';
 import { DiscordStartBackupService } from './service/start-backup.service';
 import { DiscordStartServer } from './service/start-server.service';
 import { DiscordSubmitArtService } from './service/submit-art.service';
+import { DiscordGenerateMinecraftNicksService } from './service/generate-minecraft-nicks.service';
 
 export class DiscordCommandsController {
   constructor() {}
@@ -57,6 +58,17 @@ export class DiscordCommandsController {
   async submitArt(interaction: CommandInteraction) {
     try {
       return await new DiscordSubmitArtService().handle(interaction);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async generateMinecraftNicks(interaction: CommandInteraction) {
+    try {
+      await new DiscordRoleGuard().isAdmin(interaction);
+      return await new DiscordGenerateMinecraftNicksService().handle(
+        interaction,
+      );
     } catch (error) {
       console.log(error);
     }
