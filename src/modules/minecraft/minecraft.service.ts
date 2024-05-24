@@ -14,8 +14,7 @@ export class MinecraftService {
   serverIp = process.env.MINECRAFT_SERVER_IP || '35.222.128.103';
   serverPort = parseInt(process.env.MINECRAFT_SERVER_PORT) || 25565;
   managerPort = parseInt(process.env.MINECRAFT_MANAGER_PORT) || 3003;
-  announceChannelId =
-    process.env.MINECRAFT_ANNOUNCE_CHANNEL_ID || '1231021187577155644';
+  announceChannelId = process.env.SERVER_STATUS_CHANNEL_ID;
 
   async ping(): Promise<boolean> {
     try {

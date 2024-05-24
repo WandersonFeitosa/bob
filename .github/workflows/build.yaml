@@ -32,6 +32,7 @@ jobs:
       APPROVE_ARTS_CHANNEL_ID: ${{ vars.APPROVE_ARTS_CHANNEL_ID }}
       ARTS_PANNEL_CHANNEL_ID: ${{ vars.ARTS_PANNEL_CHANNEL_ID }}
       NICKS_CHANNEL_ID: ${{ vars.NICKS_CHANNEL_ID }}
+      SERVER_STATUS_CHANNEL_ID: ${{ vars.SERVER_STATUS_CHANNEL_ID }}
 
     steps:
       - name: Checkout code
@@ -76,7 +77,8 @@ jobs:
           sed -i "s|ENV_BUCKET_NAME|$BUCKET_NAME|g" resources.yaml
           sed -i "s|ENV_APPROVE_ARTS_CHANNEL_ID|$APPROVE_ARTS_CHANNEL_ID|g" resources.yaml  
           sed -i "s|ENV_ARTS_PANNEL_CHANNEL_ID|$ARTS_PANNEL_CHANNEL_ID|g" resources.yaml
-          sed -i "s|ENV_NICKS_CHANNEL_ID|$NICKS_CHANNEL_ID|g" resources.yaml    
+          sed -i "s|ENV_NICKS_CHANNEL_ID|$NICKS_CHANNEL_ID|g" resources.yaml
+          sed -i "s|ENV_SERVER_STATUS_CHANNEL_ID|$SERVER_STATUS_CHANNEL_ID|g" resources.yaml    
           kubectl apply --record -f resources.yaml
 
       - name: Restart deployment
