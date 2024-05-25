@@ -65,7 +65,6 @@ export class DiscordCommandsController {
 
   async generateMinecraftNicks(interaction: CommandInteraction) {
     try {
-      await new DiscordRoleGuard().isAdmin(interaction);
       return await new DiscordGenerateMinecraftNicksService().handle(
         interaction,
       );
