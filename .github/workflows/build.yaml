@@ -33,6 +33,9 @@ jobs:
       ARTS_PANNEL_CHANNEL_ID: ${{ vars.ARTS_PANNEL_CHANNEL_ID }}
       NICKS_CHANNEL_ID: ${{ vars.NICKS_CHANNEL_ID }}
       SERVER_STATUS_CHANNEL_ID: ${{ vars.SERVER_STATUS_CHANNEL_ID }}
+      NICKS_WHITELIST_CHANNEL_ID: ${{ vars.NICKS_WHITELIST_CHANNEL_ID }}
+      MINECRAFT_SCREEN_NAME: ${{ vars.MINECRAFT_SCREEN_NAME }}
+      SERVER_LOG_CHANNEL_ID: ${{ vars.SERVER_LOG_CHANNEL_ID }}
 
     steps:
       - name: Checkout code
@@ -79,6 +82,8 @@ jobs:
           sed -i "s|ENV_ARTS_PANNEL_CHANNEL_ID|$ARTS_PANNEL_CHANNEL_ID|g" resources.yaml
           sed -i "s|ENV_NICKS_CHANNEL_ID|$NICKS_CHANNEL_ID|g" resources.yaml
           sed -i "s|ENV_SERVER_STATUS_CHANNEL_ID|$SERVER_STATUS_CHANNEL_ID|g" resources.yaml    
+          sed -i "s|ENV_MINECRAFT_SCREEN_NAME|$MINECRAFT_SCREEN_NAME|g" resources.yaml
+          sed -i "s|ENV_SERVER_LOG_CHANNEL_ID|$SERVER_LOG_CHANNEL_ID|g" resources.yaml
           kubectl apply --record -f resources.yaml
 
       - name: Restart deployment

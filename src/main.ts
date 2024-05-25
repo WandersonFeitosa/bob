@@ -1,6 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './modules/app/app.module';
 import {
+  ActivitiesOptions,
   Client,
   Events,
   GatewayIntentBits,
@@ -18,6 +19,7 @@ export const client = new Client({
   intents: [
     GatewayIntentBits.Guilds,
     GatewayIntentBits.GuildMessages,
+    GatewayIntentBits.MessageContent,
     GatewayIntentBits.GuildMessageReactions,
     GatewayIntentBits.GuildMembers,
     GatewayIntentBits.GuildVoiceStates,
@@ -50,6 +52,10 @@ async function startDiscordConnection() {
 
   client.once(Events.ClientReady, (readyClient) => {
     console.log(`Ready! Logged in as ${readyClient.user.tag}`);
+    client.user?.setPresence({
+      activities: [{ name: 'ele falar bosta ⬇⬇⬇', type: 2 }],
+      status: 'online',
+    });
   });
 
   client.on(Events.InteractionCreate, async (interaction: Interaction) => {
@@ -66,6 +72,11 @@ async function startDiscordConnection() {
 
   client.on(Events.MessageReactionAdd, async (reaction, user) => {
     await new DiscordEventsModule().reactionAdd(reaction, user);
+  });
+
+  client.on(Events.MessageCreate, async (message) => {
+    // if (message.author.bot) return;
+    await new DiscordEventsModule().messageCreate(message);
   });
 }
 

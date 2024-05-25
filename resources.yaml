@@ -77,3 +77,7 @@ spec:
               value: ENV_NICKS_CHANNEL_ID
             - name: SERVER_STATUS_CHANNEL_ID
               value: ENV_SERVER_STATUS_CHANNEL_ID
+            - name: MINECRAFT_SCREEN_NAME
+              value: ENV_MINECRAFT_SCREEN_NAME
+            - name: SERVER_LOG_CHANNEL_ID
+              value: ENV_SERVER_LOG_CHANNEL_ID

@@ -1,4 +1,5 @@
 import {
+  Message,
   MessageReaction,
   PartialMessageReaction,
   PartialUser,
@@ -12,5 +13,9 @@ export class DiscordEventsModule {
     user: User | PartialUser,
   ) {
     return new DiscordEventsController().reactionAdd(reaction, user);
+  }
+
+  async messageCreate(message: Message) {
+    return new DiscordEventsController().messageCreate(message);
   }
 }
