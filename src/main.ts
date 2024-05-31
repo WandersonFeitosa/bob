@@ -28,6 +28,7 @@ export const client = new Client({
 });
 const token = process.env.DISCORD_TOKEN;
 const client_id = process.env.CLIENT_ID;
+const prod: string = process.env.NODE_ENV || 'production';
 
 const rest = new REST({ version: '10' }).setToken(token);
 
@@ -52,8 +53,24 @@ async function startDiscordConnection() {
 
   client.once(Events.ClientReady, (readyClient) => {
     console.log(`Ready! Logged in as ${readyClient.user.tag}`);
+    let activities: ActivitiesOptions[] = [
+      {
+        name: 'ele falar bosta ⬇⬇⬇',
+        type: 2,
+      },
+    ];
+
+    if (prod === 'develop') {
+      activities = [
+        {
+          name: 'clonando o buba',
+          type: 0,
+        },
+      ];
+    }
+
     client.user?.setPresence({
-      activities: [{ name: 'ele falar bosta ⬇⬇⬇', type: 2 }],
+      activities,
       status: 'online',
     });
   });
@@ -75,7 +92,7 @@ async function startDiscordConnection() {
   });
 
   client.on(Events.MessageCreate, async (message) => {
-    // if (message.author.bot) return;
+    if (message.author.bot) return;
     await new DiscordEventsModule().messageCreate(message);
   });
 }
