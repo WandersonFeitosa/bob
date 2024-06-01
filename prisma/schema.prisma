@@ -13,6 +13,7 @@ model MinecraftServerStatus {
   ip     String
   port   Int
   status String
+  offlineCount Int @default(0)
 
   create_at DateTime @default(now())
   update_at DateTime @updatedAt

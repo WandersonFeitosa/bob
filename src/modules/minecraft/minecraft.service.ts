@@ -61,6 +61,12 @@ export class MinecraftService {
       },
     });
 
+    if (!dbServerStatus)
+      throw new HttpException(
+        `${this.serverIp}:${this.serverPort} not found in database`,
+        404,
+      );
+
     if (serverResponse) {
       if (
         dbServerStatus.status !== 'online' &&
@@ -76,6 +82,7 @@ export class MinecraftService {
           },
           data: {
             status: 'online',
+            offlineCount: 0,
           },
         });
       }
@@ -107,6 +114,21 @@ export class MinecraftService {
       return {
         statusCode: 200,
         message: 'O servidor está realizando backup, aguarde um momento.',
+      };
+    }
+
+    if (dbServerStatus.offlineCount < 1) {
+      await this.prisma.minecraftServerStatus.update({
+        where: {
+          id: dbServerStatus.id,
+        },
+        data: {
+          offlineCount: dbServerStatus.offlineCount + 1,
+        },
+      });
+      return {
+        statusCode: 200,
+        message: 'O servidor está offline',
       };
     }
 
