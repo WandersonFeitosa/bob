@@ -7,6 +7,7 @@ import { PrismaModule } from 'src/prisma/prisma.module';
 import { MinecraftModule } from '../minecraft/minecraft.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { FileModule } from '../file/file.module';
+import { ComputeEngineModule } from '../compute-engine/compute-engine.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { FileModule } from '../file/file.module';
     PrismaModule,
     MinecraftModule,
     FileModule,
+    ComputeEngineModule,
   ],
   controllers: [AppController],
   providers: [AppService],
