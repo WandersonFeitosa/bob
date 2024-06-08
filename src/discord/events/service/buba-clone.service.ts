@@ -2,8 +2,7 @@ import { Message } from 'discord.js';
 
 export class DiscordBubaCloneService {
   activeLoop = true;
-  async handle(message: Message) {
-    return;
+  async handle(message: Message) {    
     try {
       if (message.content) {
         if (message.content === 'para') {
