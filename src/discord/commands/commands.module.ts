@@ -86,6 +86,11 @@ const commands: Command[] = [
     description: 'Gera nicks para o servidor',
     function: new DiscordCommandsController().generateMinecraftNicks,
   },
+  {
+    name: 'arquivar-ticket',
+    description: 'Arquiva um ticket',
+    function: new DiscordCommandsController().archiveTicket,
+  },
 ];
 
 function buildCommandsObject(commands: Command[]): Record<string, Command> {

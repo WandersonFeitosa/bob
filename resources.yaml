@@ -85,3 +85,5 @@ spec:
               value: ENV_TICKET_MESSAGE_ID
             - name: TICKET_CATEGORY_ID
               value: ENV_TICKET_CATEGORY_ID
+            - name: ARCHIVE_TICKET_CATEGORY_ID
+              value: ENV_ARCHIVE_TICKET_CATEGORY_ID

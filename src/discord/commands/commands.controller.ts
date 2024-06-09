@@ -8,6 +8,7 @@ import { DiscordStartBackupService } from './service/start-backup.service';
 import { DiscordStartServer } from './service/start-server.service';
 import { DiscordSubmitArtService } from './service/submit-art.service';
 import { DiscordGenerateMinecraftNicksService } from './service/generate-minecraft-nicks.service';
+import { DiscordArchiveTicketService } from './service/archive-ticket.service';
 
 export class DiscordCommandsController {
   constructor() {}
@@ -68,6 +69,15 @@ export class DiscordCommandsController {
       return await new DiscordGenerateMinecraftNicksService().handle(
         interaction,
       );
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async archiveTicket(interaction: CommandInteraction) {
+    try {
+      await new DiscordRoleGuard().isAdmin(interaction);
+      return await new DiscordArchiveTicketService().handle(interaction);
     } catch (error) {
       console.log(error);
     }
