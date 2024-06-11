@@ -14,7 +14,8 @@ export class MinecraftService {
   serverIp = process.env.MINECRAFT_SERVER_IP || '35.222.128.103';
   serverPort = parseInt(process.env.MINECRAFT_SERVER_PORT) || 25565;
   managerPort = parseInt(process.env.MINECRAFT_MANAGER_PORT) || 3003;
-  announceChannelId = process.env.SERVER_STATUS_CHANNEL_ID;
+  announceChannelKeys = process.env.SERVER_STATUS_LIST.split(',') || [];
+  announceChannelIds = this.announceChannelKeys.map((key) => process.env[key]);
 
   async ping(): Promise<boolean> {
     try {
@@ -72,9 +73,11 @@ export class MinecraftService {
         dbServerStatus.status !== 'online' &&
         dbServerStatus.status !== 'backup'
       ) {
-        this.bobService.sendServerMessage({
-          channelId: this.announceChannelId,
-          message: `O servidor está online`,
+        this.announceChannelIds.forEach(async (channelId) => {
+          await this.bobService.sendServerMessage({
+            channelId,
+            message: `O servidor está online`,
+          });
         });
         await this.prisma.minecraftServerStatus.update({
           where: {
@@ -132,9 +135,11 @@ export class MinecraftService {
       };
     }
 
-    this.bobService.sendServerMessage({
-      channelId: this.announceChannelId,
-      message: `O servidor está offline, iniciando o servidor.`,
+    this.announceChannelIds.forEach((channelId) => {
+      this.bobService.sendServerMessage({
+        channelId,
+        message: `O servidor está online`,
+      });
     });
 
     await this.prisma.minecraftServerStatus.update({

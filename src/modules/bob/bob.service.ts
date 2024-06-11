@@ -4,7 +4,7 @@ import { sendServerMessage } from 'src/utils/send-message-on-channel';
 
 @Injectable()
 export class BobService {
-  sendServerMessage(dto: SendServerMessageInputDto) {
+  async sendServerMessage(dto: SendServerMessageInputDto) {
     try {
       sendServerMessage({
         channelId: dto.channelId,

@@ -87,3 +87,7 @@ spec:
               value: ENV_TICKET_CATEGORY_ID
             - name: ARCHIVE_TICKET_CATEGORY_ID
               value: ENV_ARCHIVE_TICKET_CATEGORY_ID
+            - name: HYBRID_STATUS_CHANNEL_ID
+              value: ENV_HYBRID_STATUS_CHANNEL_ID
+            - name: SERVER_STATUS_LIST
+              value: ENV_SERVER_STATUS_LIST
