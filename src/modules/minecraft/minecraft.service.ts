@@ -138,7 +138,7 @@ export class MinecraftService {
     this.announceChannelIds.forEach((channelId) => {
       this.bobService.sendServerMessage({
         channelId,
-        message: `O servidor está online`,
+        message: 'O servidor está offline, iniciando o servidor.',
       });
     });
 
