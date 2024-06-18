@@ -38,7 +38,7 @@ export class DiscordSubmitArtService {
       const adminRoles = process.env.ADMIN_ROLES.split(',');
 
       const channelId = process.env.APPROVE_ARTS_CHANNEL_ID;
-      const message = `**${adminRoles.map((role) => `<@&${role}>`).join(' ')}**\n**${artTitle}** feito por <@${user.id}>`;
+      const message = `**${adminRoles.map((role) => `<@&${role}>`).join(' ')}**\n**${artTitle}** feito por <@${author.id}> e enviado por <@${user.id}>`;
       const sentMessage = await sendServerMessage({
         channelId,
         message,
