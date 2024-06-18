@@ -176,7 +176,7 @@ export class DiscordArtsApproveService {
       ],
     });
 
-    const authorizeMessage = `Olá <@${author}>, sua arte **${art.name}** foi enviada por <@${art.uploadedBy}> e precisa de sua autorização para ser aprovada`;
+    const authorizeMessage = `Olá <@${author}>, sua arte **${art.name}** foi enviada por <@${art.uploadedBy}> e precisa de sua autorização para ser aprovada e colocada no <#${process.env.ARTS_PANNEL_CHANNEL_ID}>`;
 
     const attachmentUrl = art.image;
     const donwloadAttachment = await fetch(attachmentUrl);
