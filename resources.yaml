@@ -91,3 +91,5 @@ spec:
               value: ENV_HYBRID_STATUS_CHANNEL_ID
             - name: SERVER_STATUS_LIST
               value: ENV_SERVER_STATUS_LIST
+            - name: AUTHOR_AUTHORIZE_CATEGORY_ID
+              value: ENV_AUTHOR_AUTHORIZE_CATEGORY_ID

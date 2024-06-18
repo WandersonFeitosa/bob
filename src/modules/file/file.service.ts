@@ -8,7 +8,8 @@ export class FileService {
   private readonly bucketName: string;
   constructor() {
     this.storage = new Storage({
-      projectId: process.env.PROJECT_ID
+      projectId: process.env.PROJECT_ID,
+      keyFilename: process.env.KEY_FILE,
     });
     this.bucketName = process.env.BUCKET_NAME;
   }

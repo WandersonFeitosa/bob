@@ -79,6 +79,12 @@ const commands: Command[] = [
         type: 11,
         required: true,
       },
+      {
+        name: 'autor',
+        description: 'Autor da arte ',
+        type: 6,
+        required: true,
+      },
     ],
   },
   {

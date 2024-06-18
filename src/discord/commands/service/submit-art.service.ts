@@ -1,4 +1,4 @@
-import { AttachmentBuilder, CommandInteraction } from 'discord.js';
+import { AttachmentBuilder, ClientUser, CommandInteraction } from 'discord.js';
 import { sendServerMessage } from 'src/utils/send-message-on-channel';
 import { NestServices } from 'src/discord/nest-services';
 
@@ -8,22 +8,20 @@ export class DiscordSubmitArtService {
 
   async handle(interaction: CommandInteraction) {
     try {
+      await interaction.deferReply({
+        ephemeral: true,
+      });
       if (!interaction.isChatInputCommand()) return;
       const user = interaction.user;
       const artTitle = interaction.options.getString('titulo');
       const attachment = interaction.options.getAttachment('imagem');
+      const author = interaction.options.getUser('autor') as ClientUser;
 
       if (!attachment.contentType.includes('image')) {
-        return interaction.reply({
+        return interaction.editReply({
           content: 'O arquivo enviado não é uma imagem',
-          ephemeral: true,
         });
       }
-
-      interaction.reply({
-        content: 'Sua arte foi enviada e está em processamento.',
-        ephemeral: true,
-      });
 
       const attachmentUrl = attachment.url;
       const donwloadAttachment = await fetch(attachmentUrl);
@@ -40,7 +38,7 @@ export class DiscordSubmitArtService {
       const adminRoles = process.env.ADMIN_ROLES.split(',');
 
       const channelId = process.env.APPROVE_ARTS_CHANNEL_ID;
-      const message = `**${adminRoles.map((role) => `<@&${role}>`).join(' ')}**\n**${artTitle}** enviado por <@${user.id}>`;
+      const message = `**${adminRoles.map((role) => `<@&${role}>`).join(' ')}**\n**${artTitle}** feito por <@${user.id}>`;
       const sentMessage = await sendServerMessage({
         channelId,
         message,
@@ -53,6 +51,7 @@ export class DiscordSubmitArtService {
         data: {
           name: artTitle,
           image: url,
+          author: author ? author.id : user.id,
           uploadedBy: user.id,
           status: 'PENDING',
           messageId,
@@ -62,18 +61,15 @@ export class DiscordSubmitArtService {
       await sentMessage.react('✅');
       await sentMessage.react('❌');
 
-      interaction.followUp({
+      interaction.editReply({
         content: `<@${user.id}> Arte enviada com sucesso`,
-        ephemeral: true,
       });
 
       return;
     } catch (error) {
       console.log(error);
-      const status = interaction.replied ? 'followUp' : 'reply';
-      interaction[status]({
+      interaction.editReply({
         content: 'Ocorreu um erro ao enviar a arte',
-        ephemeral: true,
       });
     }
   }
