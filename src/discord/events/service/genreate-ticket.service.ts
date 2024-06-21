@@ -31,9 +31,7 @@ export class DiscordGenerateTicketService {
 
       const emojiName = reaction.emoji.name;
       await reaction.users.remove(user.id);
-      if (emojiName === '🦇') {
-        reaction.message.channel.send(`Vai se foder gotica`);
-      }
+
       if (emojiName !== '🎟️') return;
 
       await reaction.message.react('🎟️');

@@ -1,7 +1,7 @@
 import { Message } from 'discord.js';
 
 export class DiscordBubaCloneService {
-  activeLoop = true;
+  activeLoop = false;
   async handle(message: Message) {
     try {
       if (message.content) {
