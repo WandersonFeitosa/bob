@@ -24,6 +24,11 @@ export class MinecraftController {
     return await this.minecraftService.startBackup();
   }
 
+  @Post('/hybrid-status')
+  async getHybridStatus() {
+    return await this.minecraftService.getHybridStatus();
+  }
+
   @Post('/start')
   async status() {
     return await this.minecraftService.startServer();

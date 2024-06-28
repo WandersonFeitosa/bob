@@ -9,7 +9,7 @@ import { DiscordStartServer } from './service/start-server.service';
 import { DiscordSubmitArtService } from './service/submit-art.service';
 import { DiscordGenerateMinecraftNicksService } from './service/generate-minecraft-nicks.service';
 import { DiscordArchiveTicketService } from './service/archive-ticket.service';
-import { DiscordGetCharactersService } from './service/get-characters.service';
+import { DiscordGetHybridService } from './service/get-hybrids.service';
 
 export class DiscordCommandsController {
   constructor() {}
@@ -84,9 +84,9 @@ export class DiscordCommandsController {
     }
   }
 
-  async getcharacters(interaction: CommandInteraction) {
+  async getHybrids(interaction: CommandInteraction) {
     try {
-      return await new DiscordGetCharactersService().handle(interaction);
+      return await new DiscordGetHybridService().handle(interaction);
     } catch (error) {
       console.log(error);
     }

@@ -92,13 +92,13 @@ const commands: Command[] = [
     function: new DiscordCommandsController().archiveTicket,
   },
   {
-    name: 'bixos',
-    description: 'Nome dos bixos',
-    function: new DiscordCommandsController().getcharacters,
+    name: 'hibridos',
+    description: 'Verifica os híbridos do servidor',
+    function: new DiscordCommandsController().getHybrids,
     options: [
       {
-        name: 'nome-do-bixo',
-        description: 'Caso queira visualizar um bixo específico digite o nome dele',
+        name: 'nome-do-hibrido',
+        description: 'Caso queira visualizar um híbrido específico digite o nome dele',
         type: 3,
         required: false,
       },
