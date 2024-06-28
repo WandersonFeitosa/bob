@@ -1,4 +1,4 @@
-import { AttachmentBuilder } from 'discord.js';
+import { AttachmentBuilder, Message } from 'discord.js';
 import { client } from 'src/main';
 
 export async function sendServerMessage({
@@ -9,7 +9,7 @@ export async function sendServerMessage({
   channelId: string;
   message: string;
   files?: AttachmentBuilder[];
-}) {
+}): Promise<Message> {
   try {
     const channel: any = client.channels.cache.get(channelId);
     if (!channel) {

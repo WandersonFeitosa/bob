@@ -8,46 +8,42 @@ datasource db {
 }
 
 model MinecraftServerStatus {
-  id           String @id @default(uuid())
+  id           String    @id @default(uuid())
   ip           String
   port         Int
   status       String
-  offlineCount Int    @default(0)
-
-  create_at DateTime @default(now())
-  update_at DateTime? @updatedAt
-  update_by String?
-  delete    Boolean  @default(false)
+  create_at    DateTime  @default(now())
+  update_at    DateTime? @updatedAt
+  update_by    String?
+  delete       Boolean   @default(false)
+  offlineCount Int       @default(0)
 
   @@map("db_minecraft_server_status")
 }
 
 model TcsmpArts {
-  id         String @id @default(uuid())
+  id         String    @id @default(uuid())
   name       String
   image      String
+  author     String
   uploadedBy String
-  messageId  String @unique
+  messageId  String    @unique
   status     String
-
-  create_at DateTime @default(now())
-  update_at DateTime? @updatedAt
-  update_by String?
-  delete    Boolean  @default(false)
+  create_at  DateTime  @default(now())
+  update_at  DateTime? @updatedAt
+  update_by  String?
+  delete     Boolean   @default(false)
 
   @@map("db_tcsmp_arts")
 }
 
-model Hybrids {
-  id        String @id @default(uuid())
-  name      String @unique
+model db_hybrids {
+  id        String    @id
+  name      String    @unique
   image     String
   lifes     Int
-
-  create_at DateTime @default(now())
-  update_at DateTime? @updatedAt
+  create_at DateTime  @default(now())
+  update_at DateTime?
   update_by String?
-  delete    Boolean  @default(false)
-
-  @@map("db_hybrids")
+  delete    Boolean   @default(false)
 }
