@@ -91,6 +91,25 @@ const commands: Command[] = [
     description: 'Arquiva um ticket',
     function: new DiscordCommandsController().archiveTicket,
   },
+  {
+    name: 'bixos',
+    description: 'Nome dos bixos',
+    function: new DiscordCommandsController().getcharacters,
+    options: [
+      {
+        name: 'nome-do-bixo',
+        description: 'Caso queira visualizar um bixo específico digite o nome dele',
+        type: 3,
+        required: false,
+      },
+      {
+        name: 'cor-de-fundo',
+        description: 'Coloca uma cor de fundo',
+        type: 3,
+        required: false,
+      },
+    ],
+  }
 ];
 
 function buildCommandsObject(commands: Command[]): Record<string, Command> {

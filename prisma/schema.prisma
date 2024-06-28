@@ -7,34 +7,47 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-
 model MinecraftServerStatus {
-  id     String @id @default(uuid())
-  ip     String
-  port   Int
-  status String
-  offlineCount Int @default(0)
+  id           String @id @default(uuid())
+  ip           String
+  port         Int
+  status       String
+  offlineCount Int    @default(0)
 
   create_at DateTime @default(now())
-  update_at DateTime @updatedAt
+  update_at DateTime? @updatedAt
   update_by String?
   delete    Boolean  @default(false)
 
   @@map("db_minecraft_server_status")
 }
 
-model TcsmpArts{
-  id     String @id @default(uuid())
-  name   String
-  image  String
+model TcsmpArts {
+  id         String @id @default(uuid())
+  name       String
+  image      String
   uploadedBy String
-  messageId String @unique
-  status String
+  messageId  String @unique
+  status     String
 
   create_at DateTime @default(now())
-  update_at DateTime @updatedAt
+  update_at DateTime? @updatedAt
   update_by String?
   delete    Boolean  @default(false)
 
   @@map("db_tcsmp_arts")
+}
+
+model Hybrids {
+  id        String @id @default(uuid())
+  name      String @unique
+  image     String
+  lifes     Int
+
+  create_at DateTime @default(now())
+  update_at DateTime? @updatedAt
+  update_by String?
+  delete    Boolean  @default(false)
+
+  @@map("db_hybrids")
 }

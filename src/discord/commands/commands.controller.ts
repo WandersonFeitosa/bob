@@ -9,6 +9,7 @@ import { DiscordStartServer } from './service/start-server.service';
 import { DiscordSubmitArtService } from './service/submit-art.service';
 import { DiscordGenerateMinecraftNicksService } from './service/generate-minecraft-nicks.service';
 import { DiscordArchiveTicketService } from './service/archive-ticket.service';
+import { DiscordGetCharactersService } from './service/get-characters.service';
 
 export class DiscordCommandsController {
   constructor() {}
@@ -78,6 +79,14 @@ export class DiscordCommandsController {
     try {
       await new DiscordRoleGuard().isAdmin(interaction);
       return await new DiscordArchiveTicketService().handle(interaction);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async getcharacters(interaction: CommandInteraction) {
+    try {
+      return await new DiscordGetCharactersService().handle(interaction);
     } catch (error) {
       console.log(error);
     }
