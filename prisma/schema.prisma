@@ -37,7 +37,7 @@ model TcsmpArts {
   @@map("db_tcsmp_arts")
 }
 
-model db_hybrids {
+model Hybrids {
   id        String    @id
   name      String    @unique
   image     String
@@ -46,4 +46,6 @@ model db_hybrids {
   update_at DateTime?
   update_by String?
   delete    Boolean   @default(false)
+
+  @@map("db_hybrids")
 }
