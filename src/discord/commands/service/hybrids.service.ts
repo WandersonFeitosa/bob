@@ -1,18 +1,15 @@
 import { CommandInteraction } from 'discord.js';
-import { getFileNamesInFolder } from 'src/utils/getFileNamesInFolder';
 import { createCanvas, loadImage } from 'canvas';
 import { NestServices } from 'src/discord/nest-services';
 import { Hybrids } from '@prisma/client';
-import { Injectable } from '@nestjs/common';
 
-
-export class DiscordGetHybridService {
+export class DiscordHybridsService {
   prisma = new NestServices().prisma;
   folderPath = `src/images`;
   hybridWidth = 280;
   hybridHeight = 300;
 
-  async handle(interaction: CommandInteraction) {
+  async generateHybridArt(interaction: CommandInteraction) {
     try {
       if (!interaction.isChatInputCommand()) return;
       await interaction.deferReply();
@@ -122,5 +119,75 @@ export class DiscordGetHybridService {
 
     const buffer = canvas.toBuffer();
     return buffer;
+  }
+
+  async handleRegisterHybrid(interaction: CommandInteraction) {
+    try {
+      if (!interaction.isChatInputCommand()) return;
+      await interaction.deferReply({
+        ephemeral: true,
+      });
+
+      const name = interaction.options.getString('nome');
+      const animal = interaction.options.getString('animal');
+      const image = interaction.options.getString('imagem');
+      const lifes = interaction.options.getInteger('vidas');
+      const hybridUser = interaction.options.getUser('usuario');
+
+      const hybridData = {
+        name,
+        animal,
+        discord_id: hybridUser.id,
+        image,
+        lifes,
+      };
+
+      await this.registerHybrid(hybridData);
+
+      await interaction.editReply('Híbrido registrado com sucesso!');
+    } catch (error) {
+      console.error(error);
+      await interaction.editReply('Deu erro!');
+    }
+  }
+
+  async registerHybrid(hybridData: {
+    name: string;
+    animal: string;
+    discord_id?: string;
+    image?: string;
+    lifes?: number;
+  }) {
+    return await this.prisma.hybrids.create({
+      data: hybridData,
+    });
+  }
+
+  async handleListHybrids(interaction: CommandInteraction) {
+    try {
+      if (!interaction.isChatInputCommand()) return;
+      await interaction.deferReply({
+        ephemeral: true,
+      });
+
+      const hybrids = await this.prisma.hybrids.findMany({
+        orderBy: { create_at: 'asc' },
+      });
+
+      let hybridsMessage: string = '';
+
+      for (const hybrid of hybrids) {
+        hybridsMessage += `**Nome:** ${hybrid.name}\n`;
+        hybridsMessage += `**Animal:** ${hybrid.animal}\n`;
+        hybridsMessage += `**ID:**\n`;
+        hybridsMessage += '```' + hybrid.id + '```\n';
+        hybridsMessage += '----------------------\n\n';
+      }
+
+      await interaction.editReply(hybridsMessage);
+    } catch (error) {
+      console.error(error);
+      await interaction.editReply('Deu erro!');
+    }
   }
 }

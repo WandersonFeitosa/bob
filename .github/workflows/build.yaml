@@ -42,6 +42,8 @@ jobs:
       HYBRID_STATUS_CHANNEL_ID: ${{ vars.HYBRID_STATUS_CHANNEL_ID }}
       SERVER_STATUS_LIST: ${{ vars.SERVER_STATUS_LIST }}
       AUTHOR_AUTHORIZE_CATEGORY_ID: ${{ vars.AUTHOR_AUTHORIZE_CATEGORY_ID }}
+      PLAYER_NOTIFICATION_CHANNEL_ID: ${{ vars.PLAYER_NOTIFICATION_CHANNEL_ID }}
+      HYBRID_NOTIFICATION_CHANNEL_ID: ${{ vars.HYBRID_NOTIFICATION_CHANNEL_ID }}
 
     steps:
       - name: Checkout code
@@ -96,6 +98,8 @@ jobs:
           sed -i "s|ENV_HYBRID_STATUS_CHANNEL_ID|$HYBRID_STATUS_CHANNEL_ID|g" resources.yaml
           sed -i "s|ENV_SERVER_STATUS_LIST|$SERVER_STATUS_LIST|g" resources.yaml
           sed -i "s|ENV_AUTHOR_AUTHORIZE_CATEGORY_ID|$AUTHOR_AUTHORIZE_CATEGORY_ID|g" resources.yaml
+          sed -i "s|ENV_PLAYER_NOTIFICATION_CHANNEL_ID|$PLAYER_NOTIFICATION_CHANNEL_ID|g" resources.yaml
+          sed -i "s|ENV_HYBRID_NOTIFICATION_CHANNEL_ID|$HYBRID_NOTIFICATION_CHANNEL_ID|g" resources.yaml
           kubectl apply --record -f resources.yaml
 
       - name: Restart deployment

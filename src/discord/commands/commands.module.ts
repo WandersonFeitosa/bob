@@ -104,7 +104,8 @@ const commands: Command[] = [
     options: [
       {
         name: 'nome-do-hibrido',
-        description: 'Caso queira visualizar um híbrido específico digite o nome dele',
+        description:
+          'Caso queira visualizar um híbrido específico digite o nome dele',
         type: 3,
         required: false,
       },
@@ -115,7 +116,85 @@ const commands: Command[] = [
         required: false,
       },
     ],
-  }
+  },
+  {
+    name: 'criar-hibrido',
+    description: 'Cria um híbrido',
+    function: new DiscordCommandsController().registerHybrid,
+    options: [
+      {
+        name: 'nome',
+        description: 'Nome do híbrido',
+        type: 3,
+        required: true,
+      },
+      {
+        name: 'animal',
+        description: 'Animal do híbrido',
+        type: 3,
+        required: true,
+      },
+      {
+        name: 'usuario',
+        description: 'Usuário do híbrido',
+        type: 6,
+        required: true,
+      },
+      {
+        name: 'imagem',
+        description: 'Imagem do híbrido',
+        type: 3,
+        required: false,
+      },
+      {
+        name: 'vidas',
+        description: 'Vida do híbrido',
+        type: 4,
+        required: false,
+      },
+    ],
+  },
+  {
+    name: 'listar-hibridos',
+    description: 'Lista os híbridos do servidor',
+    function: new DiscordCommandsController().listHybrids,
+  },
+  {
+    name: 'registrar-jogador',
+    description: 'Registra um jogador no servidor',
+    function: new DiscordCommandsController().registerPlayer,
+    options: [
+      {
+        name: 'nome',
+        description: 'Nome do jogador',
+        type: 3,
+        required: true,
+      },
+    ],
+  },
+  {
+    name: 'vincular-jogador-familia',
+    description: 'Vincula um jogador a uma família',
+    function: new DiscordCommandsController().bindPlayerToFamily,
+    options: [
+      {
+        name: 'hibrido',
+        description: 'ID do híbrido',
+        type: 3,
+        required: true,
+      },
+    ],
+  },
+  {
+    name: 'notificar-online',
+    description: 'Notifica um jogador online',
+    function: new DiscordCommandsController().handleNotification,
+  },
+  {
+    name: 'notificar-offline',
+    description: 'Notifica todos os jogadores online',
+    function: new DiscordCommandsController().handleNotification,
+  },
 ];
 
 function buildCommandsObject(commands: Command[]): Record<string, Command> {

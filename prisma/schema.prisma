@@ -38,14 +38,40 @@ model TcsmpArts {
 }
 
 model Hybrids {
-  id        String    @id
-  name      String    @unique
-  image     String
-  lifes     Int
-  create_at DateTime  @default(now())
-  update_at DateTime?
-  update_by String?
-  delete    Boolean   @default(false)
+  id         String    @id @default(uuid())
+  name       String    @unique
+  animal     String?
+  discord_id String?   @unique
+  image      String?
+  lifes      Int       @default(4)
+  create_at  DateTime  @default(now())
+  update_at  DateTime?
+  update_by  String?
+  delete     Boolean   @default(false)
+  family     Family?
 
   @@map("db_hybrids")
+}
+
+model Player {
+  id         String    @id @default(uuid())
+  discord_id String    @unique
+  name       String
+  create_at  DateTime  @default(now())
+  update_at  DateTime?
+  update_by  String?
+  delete     Boolean   @default(false)
+  family     Family?   @relation(fields: [familyId], references: [id])
+  familyId   String?
+
+  @@map("db_player")
+}
+
+model Family {
+  id        String   @id @default(uuid())
+  hybrid_id String   @unique
+  hybrid    Hybrids  @relation(fields: [hybrid_id], references: [id])
+  players   Player[]
+
+  @@map("db_family")
 }

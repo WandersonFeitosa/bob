@@ -9,7 +9,9 @@ import { DiscordStartServer } from './service/start-server.service';
 import { DiscordSubmitArtService } from './service/submit-art.service';
 import { DiscordGenerateMinecraftNicksService } from './service/generate-minecraft-nicks.service';
 import { DiscordArchiveTicketService } from './service/archive-ticket.service';
-import { DiscordGetHybridService } from './service/get-hybrids.service';
+import { DiscordHybridsService } from './service/hybrids.service';
+import { DiscordPlayersService } from './service/players.service';
+import { DiscordNotificationService } from './service/notification.service';
 
 export class DiscordCommandsController {
   constructor() {}
@@ -86,7 +88,55 @@ export class DiscordCommandsController {
 
   async getHybrids(interaction: CommandInteraction) {
     try {
-      return await new DiscordGetHybridService().handle(interaction);
+      return await new DiscordHybridsService().generateHybridArt(interaction);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async registerHybrid(interaction: CommandInteraction) {
+    try {
+      await new DiscordRoleGuard().isAdmin(interaction);
+      return await new DiscordHybridsService().handleRegisterHybrid(
+        interaction,
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  async listHybrids(interaction: CommandInteraction) {
+    try {
+      return await new DiscordHybridsService().handleListHybrids(interaction);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async registerPlayer(interaction: CommandInteraction) {
+    try {
+      return await new DiscordPlayersService().handleRegisterPlayer(
+        interaction,
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async bindPlayerToFamily(interaction: CommandInteraction) {
+    try {
+      return await new DiscordPlayersService().handleBindPlayerToFamily(
+        interaction,
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async handleNotification(interaction: CommandInteraction) {
+    try {
+      return await new DiscordNotificationService().handleNotification(
+        interaction,
+      );
     } catch (error) {
       console.log(error);
     }

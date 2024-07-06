@@ -93,3 +93,7 @@ spec:
               value: ENV_SERVER_STATUS_LIST
             - name: AUTHOR_AUTHORIZE_CATEGORY_ID
               value: ENV_AUTHOR_AUTHORIZE_CATEGORY_ID
+            - name: PLAYER_NOTIFICATION_CHANNEL_ID
+              value: ENV_PLAYER_NOTIFICATION_CHANNEL_ID
+            - name: HYBRID_NOTIFICATION_CHANNEL_ID
+              value: ENV_HYBRID_NOTIFICATION_CHANNEL_ID

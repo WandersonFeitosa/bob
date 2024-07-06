@@ -3,9 +3,6 @@ import axios from 'axios';
 import * as net from 'net';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { BobService } from '../bob/bob.service';
-import { DiscordGetHybridService } from 'src/discord/commands/service/get-hybrids.service';
-import { sendServerMessage } from '../../utils/send-message-on-channel';
-import { AttachmentBuilder } from 'discord.js';
 
 @Injectable()
 export class MinecraftService {
@@ -267,23 +264,5 @@ export class MinecraftService {
     } catch (error) {
       console.log(error);
     }
-  }
-
-  async getHybridStatus(): Promise<any> {
-    const hybridService = new DiscordGetHybridService();
-
-    const hybrids = await this.prisma.hybrids.findMany();
-
-    const buffer = await hybridService.generateHybridGroupImage(hybrids);
-
-    const hybridAttachment = new AttachmentBuilder(buffer);
-
-    await sendServerMessage({
-      channelId: '870793429406347337',
-      message: 'Status dos híbridos',
-      files: [hybridAttachment],
-    });
-
-    return buffer;
   }
 }
