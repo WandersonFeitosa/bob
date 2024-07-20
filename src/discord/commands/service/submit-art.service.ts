@@ -47,7 +47,7 @@ export class DiscordSubmitArtService {
 
       const messageId = sentMessage.id;
 
-      await this.prismaService.tcsmpArts.create({
+      await this.prismaService.tcsmpArt.create({
         data: {
           name: artTitle,
           image: url,
