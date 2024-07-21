@@ -195,6 +195,11 @@ const commands: Command[] = [
     description: 'Notifica todos os jogadores online',
     function: new DiscordCommandsController().handleNotification,
   },
+  {
+    name: 'resetar-senha',
+    description: 'Reseta a senha de um jogador',
+    function: new DiscordCommandsController().resetPassword,
+  },
 ];
 
 function buildCommandsObject(commands: Command[]): Record<string, Command> {

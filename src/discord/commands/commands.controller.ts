@@ -12,6 +12,7 @@ import { DiscordArchiveTicketService } from './service/archive-ticket.service';
 import { DiscordHybridsService } from './service/hybrids.service';
 import { DiscordPlayersService } from './service/players.service';
 import { DiscordNotificationService } from './service/notification.service';
+import { DiscordServerCommandsService } from './service/server-commands.service';
 
 export class DiscordCommandsController {
   constructor() {}
@@ -135,6 +136,17 @@ export class DiscordCommandsController {
   async handleNotification(interaction: CommandInteraction) {
     try {
       return await new DiscordNotificationService().handleNotification(
+        interaction,
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async resetPassword(interaction: CommandInteraction) {
+    try {
+      await new DiscordRoleGuard().isAdmin(interaction);
+      return await new DiscordServerCommandsService().resetPassword(
         interaction,
       );
     } catch (error) {
