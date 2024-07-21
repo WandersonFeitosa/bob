@@ -199,6 +199,14 @@ const commands: Command[] = [
     name: 'resetar-senha',
     description: 'Reseta a senha de um jogador',
     function: new DiscordCommandsController().resetPassword,
+    options: [
+      {
+        name: 'nickname',
+        description: 'Nickname do jogador',
+        type: 3,
+        required: true,
+      },
+    ],
   },
 ];
 
