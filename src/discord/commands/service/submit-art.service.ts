@@ -1,10 +1,11 @@
 import { AttachmentBuilder, ClientUser, CommandInteraction } from 'discord.js';
+import { nestServices } from 'src/discord/nest-services';
 import { sendServerMessage } from 'src/utils/send-message-on-channel';
-import { NestServices } from 'src/discord/nest-services';
+
 
 export class DiscordSubmitArtService {
-  private prismaService = new NestServices().prisma;
-  private fileService = new NestServices().fileService;
+  private prismaService = nestServices.prisma;
+  private fileService = nestServices.fileService;
 
   async handle(interaction: CommandInteraction) {
     try {

@@ -6,12 +6,12 @@ import {
   PartialUser,
   User,
 } from 'discord.js';
-import { NestServices } from 'src/discord/nest-services';
+import { nestServices } from 'src/discord/nest-services';
 import { client } from 'src/main';
 import { createChannel } from 'src/utils/create-channel';
 import { sendServerMessage } from 'src/utils/send-message-on-channel';
 export class DiscordArtsApproveService {
-  private prismaService = new NestServices().prisma;
+  private prismaService = nestServices.prisma;
   async handle(
     reaction: MessageReaction | PartialMessageReaction,
     user: User | PartialUser,

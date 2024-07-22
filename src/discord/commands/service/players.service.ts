@@ -1,8 +1,8 @@
 import { CommandInteraction } from 'discord.js';
-import { NestServices } from 'src/discord/nest-services';
+import { nestServices } from 'src/discord/nest-services';
 
 export class DiscordPlayersService {
-  prisma = new NestServices().prisma;
+  prisma = nestServices.prisma;
 
   async handleRegisterPlayer(interaction: CommandInteraction) {
     try {

@@ -1,10 +1,11 @@
 import { CommandInteraction } from 'discord.js';
 import { createCanvas, loadImage } from 'canvas';
-import { NestServices } from 'src/discord/nest-services';
+
 import { Hybrids } from '@prisma/client';
+import { nestServices } from 'src/discord/nest-services';
 
 export class DiscordHybridsService {
-  prisma = new NestServices().prisma;
+  prisma = nestServices.prisma;
   folderPath = `src/images`;
   hybridWidth = 280;
   hybridHeight = 300;

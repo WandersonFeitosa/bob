@@ -1,10 +1,10 @@
 import { Hybrids, Player } from '@prisma/client';
 import { CommandInteraction } from 'discord.js';
-import { NestServices } from 'src/discord/nest-services';
+import { nestServices } from 'src/discord/nest-services';
 import { sendServerMessage } from 'src/utils/send-message-on-channel';
 
 export class DiscordNotificationService {
-  prisma = new NestServices().prisma;
+  prisma = nestServices.prisma;
   playerNotificationChannelId =
     process.env.PLAYER_NOTIFICATION_CHANNEL_ID || '1259271419947253851';
   hybridNotificationChannelId =
