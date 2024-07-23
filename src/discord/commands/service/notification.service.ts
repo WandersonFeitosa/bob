@@ -9,6 +9,8 @@ export class DiscordNotificationService {
     process.env.PLAYER_NOTIFICATION_CHANNEL_ID || '1259271419947253851';
   hybridNotificationChannelId =
     process.env.HYBRID_NOTIFICATION_CHANNEL_ID || '1259271530991583262';
+  playerServerId = process.env.SERVER_ID || '1201647030938910750';
+  hybridServerId = process.env.HYBRID_SERVER_ID || '1263520640934084648';
 
   async handleNotification(interaction: CommandInteraction) {
     try {
@@ -16,6 +18,8 @@ export class DiscordNotificationService {
       await interaction.deferReply({
         ephemeral: true,
       });
+
+      const serverOrigin = interaction.guildId;
 
       const player = await this.prisma.player.findFirst({
         where: { discord_id: interaction.user.id },
@@ -42,13 +46,34 @@ export class DiscordNotificationService {
           break;
       }
 
-      if (player) {
+      if (
+        serverOrigin !== this.playerServerId &&
+        serverOrigin !== this.hybridServerId
+      ) {
+        await interaction.editReply('Comando não permitido nesse servidor!');
+        return;
+      }
+
+      console.log('serverOrigin', serverOrigin);
+      console.log('this.playerServerId', this.playerServerId);
+      console.log('this.hybridServerId', this.hybridServerId);
+
+      if (serverOrigin === this.playerServerId) {
+        if (!player)
+          return await interaction.editReply(
+            'Você não está registrado como jogador',
+          );
         await this.sendHybridNotification({
           player,
           message,
         });
       }
-      if (hybrid) {
+
+      if (serverOrigin === this.hybridServerId) {
+        if (!hybrid)
+          return await interaction.editReply(
+            'Você não está registrado como híbrido',
+          );
         await this.sendPlayerNotification({
           hybrid,
           message,
