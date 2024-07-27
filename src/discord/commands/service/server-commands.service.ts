@@ -10,15 +10,26 @@ export class DiscordServerCommandsService {
     try {
       if (!interaction.isChatInputCommand()) return;
 
-      interaction.deferReply();
+      interaction.deferReply({
+        ephemeral: true,
+      });
 
       const nickName = interaction.options.getString('nickname');
-      const managerUrl = `http://${process.env.MINECRAFT_SERVER_IP}:${process.env.MINECRAFT_SERVER_PORT}/execute-command`;
+      const managerUrl = `http://${process.env.MINECRAFT_SERVER_IP}:${process.env.MINECRAFT_MANAGER_PORT}/execute-command`;
 
-      const response = await axios.post(managerUrl, {
-        command: `simplelogin unregister ${nickName}`,
-        screenName: 'tcsmp',
-      });
+      const response = await axios.post(
+        managerUrl,
+        {
+          command: `simplelogin unregister ${nickName}`,
+          screenName: 'tcsmp',
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${process.env.MINECRAFT_MANAGER_TOKEN}`,
+          },
+        },
+      );
 
       const { data } = response;
 
