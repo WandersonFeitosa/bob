@@ -385,6 +385,10 @@ export class MinecraftService {
         console.log(
           `Sending log ${logsSent} of ${totalLogsToSend} (${logsSentPercentage.toFixed(2)}%)`,
         );
+        const message = logsToSend[i];
+
+        if (message.length > 1999) continue;
+        
         await sendServerMessage({
           channelId:
             process.env.SERVER_LOGS_CHANNEL_ID || '1266622588629815328',
