@@ -8,15 +8,17 @@ datasource db {
 }
 
 model MinecraftServerStatus {
-  id           String    @id @default(uuid())
-  ip           String
-  port         Int
-  status       String
-  create_at    DateTime  @default(now())
-  update_at    DateTime? @updatedAt
-  update_by    String?
-  delete       Boolean   @default(false)
-  offlineCount Int       @default(0)
+  id               String    @id @default(uuid())
+  ip               String
+  port             Int
+  status           String
+  offlineCount     Int       @default(0)
+  last_log_message String?
+  last_log_time    DateTime?
+  create_at        DateTime  @default(now())
+  update_at        DateTime? @updatedAt
+  update_by        String?
+  delete           Boolean   @default(false)
 
   @@map("tb_minecraft_server_status")
 }

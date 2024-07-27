@@ -3,9 +3,11 @@ import axios from 'axios';
 import * as net from 'net';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { BobService } from '../bob/bob.service';
+import { sendServerMessage } from 'src/utils/send-message-on-channel';
 
 @Injectable()
 export class MinecraftService {
+  updatingLogs = false;
   constructor(
     private prisma: PrismaService,
     private bobService: BobService,
@@ -88,7 +90,7 @@ export class MinecraftService {
             offlineCount: 0,
           },
         });
-        
+
         await this.disableAvaDrops();
       }
 
@@ -297,5 +299,141 @@ export class MinecraftService {
       console.log(error);
       throw new Error('Error on disableAvaDrops');
     }
+  }
+
+  async getServerLogs(): Promise<any> {
+    if (this.updatingLogs) {
+      console.log('Logs are being updated');
+      return { statusCode: 200, message: 'Updating logs' };
+    }
+    try {
+      console.log('Getting server logs');
+      const response = await axios.get(
+        `http://${this.serverIp}:${this.managerPort}/read-content`,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${process.env.MINECRAFT_MANAGER_TOKEN}`,
+          },
+        },
+      );
+
+      const fileContent: string = response.data.file;
+
+      const logs = fileContent.split('\n');
+
+      console.log(`${logs.length} logs found`);
+
+      let lastIndexWithDate = 0;
+      for (let i = logs.length - 1; i >= 0; i--) {
+        if (logs[i].match(/\[\d{2}\w{3}\d{4}\s\d{2}:\d{2}:\d{2}\.\d{3}\]/)) {
+          lastIndexWithDate = i;
+          break;
+        }
+      }
+
+      const lastLogMessage = logs[lastIndexWithDate];
+      const lastLogDate = this.getMessageTime(lastLogMessage);
+
+      const lastSentLogData = await this.prisma.minecraftServerStatus.findFirst(
+        {
+          where: {
+            ip: this.serverIp,
+            port: this.serverPort,
+          },
+          select: {
+            last_log_time: true,
+            last_log_message: true,
+          },
+        },
+      );
+
+      let lastLogSentIndex: number = 0;
+      if (lastSentLogData.last_log_time < lastLogDate) {
+        for (let i = logs.length - 1; i >= 0; i--) {
+          if (logs[i].match(/\[\d{2}\w{3}\d{4}\s\d{2}:\d{2}:\d{2}\.\d{3}\]/)) {
+            const logDate = this.getMessageTime(logs[i]);
+            if (logDate < lastSentLogData.last_log_time) {
+              lastLogSentIndex = i;
+              break;
+            }
+          }
+        }
+      }
+      const lastMessage = logs[logs.length - 1];
+      if (
+        lastLogSentIndex === 0 &&
+        lastMessage === lastSentLogData.last_log_message
+      ) {
+        return {
+          statusCode: 200,
+          message: 'No pending logs',
+        };
+      }
+
+      const logsToSend = logs.slice(lastLogSentIndex, logs.length - 1);
+
+      console.log(`${logsToSend.length} pending logs`);
+
+      this.updatingLogs = true;
+      const totalLogsToSend = logsToSend.length;
+      let logsSent = 0;
+      let logsSentPercentage = 0;
+      for (let i = 0; i < totalLogsToSend; i++) {
+        logsSent++;
+        logsSentPercentage = (logsSent / totalLogsToSend) * 100;
+        console.log(
+          `Sending log ${logsSent} of ${totalLogsToSend} (${logsSentPercentage.toFixed(2)}%)`,
+        );
+        await sendServerMessage({
+          channelId:
+            process.env.SERVER_LOGS_CHANNEL_ID || '1266622588629815328',
+          message: '```' + logsToSend[i] + '```',
+        });
+      }
+
+      await this.prisma.minecraftServerStatus.updateMany({
+        where: {
+          ip: this.serverIp,
+          port: this.serverPort,
+        },
+        data: {
+          last_log_time: lastLogDate,
+          last_log_message: lastLogMessage,
+        },
+      });
+
+      this.updatingLogs = false;
+      return {
+        statusCode: 200,
+        message: 'Logs enviados',
+        lastLogMessage,
+        lastLogDate,
+        lastLogSentIndex,
+        logsToSend,
+      };
+    } catch (error) {
+      console.log(error);
+      throw new HttpException(error, 500);
+    }
+  }
+
+  getMessageTime(message: string): Date {
+    const date = message.split(' ')[0].replace('[', '');
+    const time = message.split(' ')[1].replace(']', '');
+
+    const day = date.slice(0, 2);
+    const month = date.slice(2, 5);
+    const year = date.slice(5, 9);
+    const hour = time.slice(0, 2);
+    const minute = time.slice(3, 5);
+    const second = time.slice(6, 8);
+    const millisecond = time.slice(9, 12);
+
+    const logDate = new Date(
+      `${month} ${day}, ${year} ${hour}:${minute}:${second}.${millisecond}`,
+    );
+
+    return new Date(logDate.getTime() - 3 * 60 * 60 * 1000);
   }
 }
