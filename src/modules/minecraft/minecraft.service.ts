@@ -88,6 +88,8 @@ export class MinecraftService {
             offlineCount: 0,
           },
         });
+        
+        await this.disableAvaDrops();
       }
 
       console.log('Server status:', dbServerStatus.status);
@@ -263,6 +265,37 @@ export class MinecraftService {
       return response.data.message;
     } catch (error) {
       console.log(error);
+    }
+  }
+
+  async disableAvaDrops(): Promise<void> {
+    try {
+      const managerUrl = `http://${process.env.MINECRAFT_SERVER_IP}:${process.env.MINECRAFT_MANAGER_PORT}/execute-command`;
+
+      const response = await axios.post(
+        managerUrl,
+        {
+          command: `ava setMobDropKitChance 0`,
+          screenName: 'tcsmp',
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${process.env.MINECRAFT_MANAGER_TOKEN}`,
+          },
+        },
+      );
+
+      const { data } = response;
+
+      if (data.error) {
+        throw new Error(data.error);
+      }
+
+      return data;
+    } catch (error) {
+      console.log(error);
+      throw new Error('Error on disableAvaDrops');
     }
   }
 }
