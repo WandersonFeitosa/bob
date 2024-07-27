@@ -10,7 +10,7 @@ export class DiscordServerCommandsService {
     try {
       if (!interaction.isChatInputCommand()) return;
 
-      interaction.deferReply({
+      await interaction.deferReply({
         ephemeral: true,
       });
 
@@ -34,11 +34,11 @@ export class DiscordServerCommandsService {
       const { data } = response;
 
       if (data.error) {
-        interaction.editReply(data.error);
+        await interaction.editReply(data.error);
         return;
       }
 
-      interaction.editReply(
+      await interaction.editReply(
         data.message ? data.message : 'Senha resetada com sucesso',
       );
 
