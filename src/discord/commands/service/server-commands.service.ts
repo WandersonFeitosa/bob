@@ -1,7 +1,9 @@
 import axios from 'axios';
 import { CommandInteraction } from 'discord.js';
+import { nestServices } from 'src/discord/nest-services';
 
 export class DiscordServerCommandsService {
+  minecraftService = nestServices.minecraftService;
   handle(interaction: CommandInteraction) {
     if (!interaction.isChatInputCommand()) return;
   }
@@ -42,6 +44,7 @@ export class DiscordServerCommandsService {
         data.message ? data.message : 'Senha resetada com sucesso',
       );
 
+      this.minecraftService.getServerLogs();
       return;
     } catch (error) {
       console.error('Error on resetPassword', error);

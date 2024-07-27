@@ -360,11 +360,12 @@ export class MinecraftService {
           }
         }
       }
-      const lastMessage = logs[logs.length - 1];
+      const lastMessage = logs[logs.length - 2];
       if (
         lastLogSentIndex === 0 &&
         lastMessage === lastSentLogData.last_log_message
       ) {
+        console.log('No pending logs');
         return {
           statusCode: 200,
           message: 'No pending logs',
