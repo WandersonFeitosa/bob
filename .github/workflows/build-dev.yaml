@@ -68,17 +68,17 @@ jobs:
             --api=api \
             --openapi-spec=swagger.yaml \
             --project=$GOOGLE_PROJECT \
-            --region=$CLUSTER_REGION
+            --region=us-central-1
 
           # Create or update API Gateway
-          if gcloud api-gateway gateways describe api-gateway --project=$GOOGLE_PROJECT --region=$CLUSTER_REGION; then
+          if gcloud api-gateway gateways describe api-gateway --project=$GOOGLE_PROJECT --region=us-central-1; then
             gcloud api-gateway gateways update api-gateway \
               --api-config=api-config \
               --project=$GOOGLE_PROJECT \
-              --region=$CLUSTER_REGION
+              --region=us-central-1
           else
             gcloud api-gateway gateways create api-gateway \
               --api-config=api-config \
               --project=$GOOGLE_PROJECT \
-              --region=$CLUSTER_REGION
+              --region=us-central-1
           fi
