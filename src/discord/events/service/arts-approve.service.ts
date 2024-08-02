@@ -1,4 +1,4 @@
-import { TcsmpArts } from '@prisma/client';
+import { TcsmpArt } from '@prisma/client';
 import {
   AttachmentBuilder,
   MessageReaction,
@@ -6,12 +6,12 @@ import {
   PartialUser,
   User,
 } from 'discord.js';
-import { NestServices } from 'src/discord/nest-services';
+import { nestServices } from 'src/discord/nest-services';
 import { client } from 'src/main';
 import { createChannel } from 'src/utils/create-channel';
 import { sendServerMessage } from 'src/utils/send-message-on-channel';
 export class DiscordArtsApproveService {
-  private prismaService = new NestServices().prisma;
+  private prismaService = nestServices.prisma;
   async handle(
     reaction: MessageReaction | PartialMessageReaction,
     user: User | PartialUser,
@@ -99,7 +99,7 @@ export class DiscordArtsApproveService {
   async handleApprove(messageId: string) {
     try {
       console.log('[Discord.Events] Approve', messageId);
-      const art = await this.prismaService.tcsmpArts.findFirst({
+      const art = await this.prismaService.tcsmpArt.findFirst({
         where: {
           messageId,
           status: 'PENDING',
@@ -112,7 +112,7 @@ export class DiscordArtsApproveService {
         return this.handleAuthorAuthorizationGenerate(art);
       }
 
-      await this.prismaService.tcsmpArts.update({
+      await this.prismaService.tcsmpArt.update({
         where: {
           id: art.id,
         },
@@ -142,7 +142,7 @@ export class DiscordArtsApproveService {
 
   async handleReject(messageId: string) {
     try {
-      const rejectedArt = await this.prismaService.tcsmpArts.update({
+      const rejectedArt = await this.prismaService.tcsmpArt.update({
         where: {
           messageId,
         },
@@ -159,7 +159,7 @@ export class DiscordArtsApproveService {
     }
   }
 
-  async handleAuthorAuthorizationGenerate(art: TcsmpArts) {
+  async handleAuthorAuthorizationGenerate(art: TcsmpArt) {
     const author = art.author;
     const user = await client.users.fetch(author);
 
@@ -194,7 +194,7 @@ export class DiscordArtsApproveService {
     await userAuthorizeMessage.react('✅');
     await userAuthorizeMessage.react('❌');
 
-    await this.prismaService.tcsmpArts.update({
+    await this.prismaService.tcsmpArt.update({
       where: {
         id: art.id,
       },
@@ -213,7 +213,7 @@ export class DiscordArtsApproveService {
     user: User;
   }) {
     try {
-      const art = await this.prismaService.tcsmpArts.findFirst({
+      const art = await this.prismaService.tcsmpArt.findFirst({
         where: {
           messageId: reaction.message.id,
           status: 'PENDING AUTHOR',
@@ -224,7 +224,7 @@ export class DiscordArtsApproveService {
 
       if (!art || art.author !== user.id) return;
 
-      await this.prismaService.tcsmpArts.update({
+      await this.prismaService.tcsmpArt.update({
         where: {
           id: art.id,
         },
@@ -261,7 +261,7 @@ export class DiscordArtsApproveService {
     user: User;
   }) {
     try {
-      const art = await this.prismaService.tcsmpArts.update({
+      const art = await this.prismaService.tcsmpArt.update({
         where: {
           messageId: reaction.message.id,
         },

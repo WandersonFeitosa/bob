@@ -8,20 +8,22 @@ datasource db {
 }
 
 model MinecraftServerStatus {
-  id           String    @id @default(uuid())
-  ip           String
-  port         Int
-  status       String
-  create_at    DateTime  @default(now())
-  update_at    DateTime? @updatedAt
-  update_by    String?
-  delete       Boolean   @default(false)
-  offlineCount Int       @default(0)
+  id               String    @id @default(uuid())
+  ip               String
+  port             Int
+  status           String
+  offlineCount     Int       @default(0)
+  last_log_message String?
+  last_log_time    DateTime?
+  create_at        DateTime  @default(now())
+  update_at        DateTime? @updatedAt
+  update_by        String?
+  delete           Boolean   @default(false)
 
-  @@map("db_minecraft_server_status")
+  @@map("tb_minecraft_server_status")
 }
 
-model TcsmpArts {
+model TcsmpArt {
   id         String    @id @default(uuid())
   name       String
   image      String
@@ -34,7 +36,7 @@ model TcsmpArts {
   update_by  String?
   delete     Boolean   @default(false)
 
-  @@map("db_tcsmp_arts")
+  @@map("tb_tcsmp_arts")
 }
 
 model Hybrids {
@@ -50,7 +52,7 @@ model Hybrids {
   delete     Boolean   @default(false)
   family     Family?
 
-  @@map("db_hybrids")
+  @@map("tb_hybrids")
 }
 
 model Player {
@@ -64,7 +66,7 @@ model Player {
   family     Family?   @relation(fields: [familyId], references: [id])
   familyId   String?
 
-  @@map("db_player")
+  @@map("tb_players")
 }
 
 model Family {
@@ -73,5 +75,5 @@ model Family {
   hybrid    Hybrids  @relation(fields: [hybrid_id], references: [id])
   players   Player[]
 
-  @@map("db_family")
+  @@map("tb_families")
 }

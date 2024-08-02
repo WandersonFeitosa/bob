@@ -28,4 +28,10 @@ export class MinecraftController {
   async status() {
     return await this.minecraftService.startServer();
   }
+
+  @Get('/server-logs')
+  @Cron(CronExpression.EVERY_10_SECONDS)
+  async serverLogs() {
+    return await this.minecraftService.getServerLogs();
+  }
 }

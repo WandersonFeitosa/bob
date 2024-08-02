@@ -1,9 +1,9 @@
 import axios from 'axios';
 import { CommandInteraction } from 'discord.js';
-import { NestServices } from 'src/discord/nest-services';
+import { nestServices } from 'src/discord/nest-services';
 
 export class DiscordStartBackupService {
-  private prismaService = new NestServices().prisma;
+  private prismaService = nestServices.prisma;
   serverIp = process.env.MINECRAFT_SERVER_IP || '35.222.128.103';
   serverPort = parseInt(process.env.MINECRAFT_SERVER_PORT) || 25565;
   managerPort = parseInt(process.env.MINECRAFT_MANAGER_PORT) || 3003;

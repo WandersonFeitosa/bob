@@ -1,8 +1,8 @@
 import { CommandInteraction } from 'discord.js';
-import { NestServices } from 'src/discord/nest-services';
+import { nestServices } from 'src/discord/nest-services';
 
 export class DiscordServerStatusService {
-  private minecraftService = new NestServices().minecraftService;
+  private minecraftService = nestServices.minecraftService;
 
   async handle(interaction: CommandInteraction) {
     if (!interaction.isChatInputCommand()) return;
