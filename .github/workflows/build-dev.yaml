@@ -61,24 +61,23 @@ jobs:
           project_id: ${{ vars.GOOGLE_PROJECT }}
           install_components: 'gke-gcloud-auth-plugin'
 
-      
       - name: Create or update API Gateway
         run: |
           # Create API config
-          gcloud directed-optics-429602-a6/locations/global/apis/hosts api-configs create api-config \
+          gcloud api-gateway api-configs create api-config \
             --api=api \
             --openapi-spec=swagger.yaml \
             --project=$GOOGLE_PROJECT \
             --region=$CLUSTER_REGION
 
           # Create or update API Gateway
-          if gcloud directed-optics-429602-a6/locations/global/apis/hosts gateways describe directed-optics-429602-a6/locations/global/apis/hosts --project=$GOOGLE_PROJECT --region=$CLUSTER_REGION; then
-            gcloud directed-optics-429602-a6/locations/global/apis/hosts gateways update directed-optics-429602-a6/locations/global/apis/hosts \
+          if gcloud api-gateway gateways describe api-gateway --project=$GOOGLE_PROJECT --region=$CLUSTER_REGION; then
+            gcloud api-gateway gateways update api-gateway \
               --api-config=api-config \
               --project=$GOOGLE_PROJECT \
               --region=$CLUSTER_REGION
           else
-            gcloud directed-optics-429602-a6/locations/global/apis/hosts gateways create directed-optics-429602-a6/locations/global/apis/hosts \
+            gcloud api-gateway gateways create api-gateway \
               --api-config=api-config \
               --project=$GOOGLE_PROJECT \
               --region=$CLUSTER_REGION
