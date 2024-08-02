@@ -1,0 +1,131 @@
+name: Build and Publish
+
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+  google-cloud-build-and-deploy:
+    runs-on: ubuntu-latest
+    env:
+      PROJECT_NAME: 'bob'
+      IMAGE_NAME: 'bot'
+      GOOGLE_APPLICATION_CREDENTIALS: ${{ vars.GOOGLE_APPLICATION_CREDENTIALS }}
+      GOOGLE_PROJECT: ${{ vars.GOOGLE_PROJECT }}
+      CLUSTER_NAME: ${{ vars.CLUSTER_NAME }}
+      CLUSTER_REGION: ${{ vars.CLUSTER_REGION }}
+      CLIENT_ID: ${{ vars.CLIENT_ID }}
+      CLIENT_SECRET: ${{ vars.CLIENT_SECRET }}
+      DISCORD_TOKEN: ${{ vars.DISCORD_TOKEN }}
+      ADMIN_ROLES: ${{ vars.ADMIN_ROLES }}
+      SERVER_ID: ${{ vars.SERVER_ID }}
+      DATABASE_URL: ${{ vars.DATABASE_URL }}
+      JWT_SECRET: ${{ vars.JWT_SECRET }}
+      MINECRAFT_SERVER_IP: ${{ vars.MINECRAFT_SERVER_IP }}
+      MINECRAFT_SERVER_PORT: ${{ vars.MINECRAFT_SERVER_PORT }}
+      MINECRAFT_MANAGER_PORT: ${{ vars.MINECRAFT_MANAGER_PORT }}
+      MINECRAFT_MANAGER_TOKEN: ${{ vars.MINECRAFT_MANAGER_TOKEN }}
+      MINECRAFT_ANNOUNCE_CHANNEL_ID: ${{ vars.MINECRAFT_ANNOUNCE_CHANNEL_ID }}
+      PROJECT_ID: ${{ vars.PROJECT_ID }}
+      BUCKET_NAME: ${{ vars.BUCKET_NAME }}
+      APPROVE_ARTS_CHANNEL_ID: ${{ vars.APPROVE_ARTS_CHANNEL_ID }}
+      ARTS_PANNEL_CHANNEL_ID: ${{ vars.ARTS_PANNEL_CHANNEL_ID }}
+      NICKS_CHANNEL_ID: ${{ vars.NICKS_CHANNEL_ID }}
+      SERVER_STATUS_CHANNEL_ID: ${{ vars.SERVER_STATUS_CHANNEL_ID }}
+      NICKS_WHITELIST_CHANNEL_ID: ${{ vars.NICKS_WHITELIST_CHANNEL_ID }}
+      MINECRAFT_SCREEN_NAME: ${{ vars.MINECRAFT_SCREEN_NAME }}
+      SERVER_LOG_CHANNEL_ID: ${{ vars.SERVER_LOG_CHANNEL_ID }}
+      TICKET_MESSAGE_ID: ${{ vars.TICKET_MESSAGE_ID }}
+      TICKET_CATEGORY_ID: ${{ vars.TICKET_CATEGORY_ID }}
+      ARCHIVE_TICKET_CATEGORY_ID: ${{ vars.ARCHIVE_TICKET_CATEGORY_ID }}
+      HYBRID_STATUS_CHANNEL_ID: ${{ vars.HYBRID_STATUS_CHANNEL_ID }}
+      SERVER_STATUS_LIST: ${{ vars.SERVER_STATUS_LIST }}
+      AUTHOR_AUTHORIZE_CATEGORY_ID: ${{ vars.AUTHOR_AUTHORIZE_CATEGORY_ID }}
+      PLAYER_NOTIFICATION_CHANNEL_ID: ${{ vars.PLAYER_NOTIFICATION_CHANNEL_ID }}
+      HYBRID_NOTIFICATION_CHANNEL_ID: ${{ vars.HYBRID_NOTIFICATION_CHANNEL_ID }}
+      HYBRID_SERVER_ID: ${{ vars.HYBRID_SERVER_ID }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - id: 'auth'
+        uses: 'google-github-actions/auth@v2'
+        with:
+          credentials_json: ${{ vars.GOOGLE_APPLICATION_CREDENTIALS }}
+
+      - name: Gcloud cli setup
+        uses: google-github-actions/setup-gcloud@v2
+        with:
+          project_id: ${{ vars.GOOGLE_PROJECT }}
+          install_components: 'gke-gcloud-auth-plugin'
+
+      - name: Docker build and push
+        run: |
+          gcloud auth configure-docker us-central1-docker.pkg.dev
+          docker build -t us-central1-docker.pkg.dev/$GOOGLE_PROJECT/$PROJECT_NAME/$IMAGE_NAME .
+          docker push us-central1-docker.pkg.dev/$GOOGLE_PROJECT/$PROJECT_NAME/$IMAGE_NAME
+
+      - name: Kubectl setup
+        run: |
+          gcloud container clusters get-credentials $CLUSTER_NAME --region $CLUSTER_REGION
+          sed -i "s|PROJECT_NAME|$PROJECT_NAME|g" resources.yaml
+          sed -i "s|IMAGE_NAME|$IMAGE_NAME|g" resources.yaml
+          sed -i "s|GOOGLE_PROJECT|$GOOGLE_PROJECT|g" resources.yaml
+          sed -i "s|ENV_CLIENT_ID|$CLIENT_ID|g" resources.yaml
+          sed -i "s|ENV_CLIENT_SECRET|$CLIENT_SECRET|g" resources.yaml
+          sed -i "s|ENV_DISCORD_TOKEN|$DISCORD_TOKEN|g" resources.yaml
+          sed -i "s|ENV_ADMIN_ROLES|$ADMIN_ROLES|g" resources.yaml
+          sed -i "s|ENV_SERVER_ID|$SERVER_ID|g" resources.yaml
+          sed -i "s|ENV_DATABASE_URL|$DATABASE_URL|g" resources.yaml
+          sed -i "s|ENV_JWT_SECRET|$JWT_SECRET|g" resources.yaml   
+          sed -i "s|ENV_MINECRAFT_SERVER_IP|$MINECRAFT_SERVER_IP|g" resources.yaml
+          sed -i "s|ENV_MINECRAFT_SERVER_PORT|$MINECRAFT_SERVER_PORT|g" resources.yaml
+          sed -i "s|ENV_MINECRAFT_MANAGER_PORT|$MINECRAFT_MANAGER_PORT|g" resources.yaml
+          sed -i "s|ENV_MINECRAFT_MANAGER_TOKEN|$MINECRAFT_MANAGER_TOKEN|g" resources.yaml
+          sed -i "s|ENV_MINECRAFT_ANNOUNCE_CHANNEL_ID|$MINECRAFT_ANNOUNCE_CHANNEL_ID|g" resources.yaml
+          sed -i "s|ENV_PROJECT_ID|$PROJECT_ID|g" resources.yaml
+          sed -i "s|ENV_BUCKET_NAME|$BUCKET_NAME|g" resources.yaml
+          sed -i "s|ENV_APPROVE_ARTS_CHANNEL_ID|$APPROVE_ARTS_CHANNEL_ID|g" resources.yaml  
+          sed -i "s|ENV_ARTS_PANNEL_CHANNEL_ID|$ARTS_PANNEL_CHANNEL_ID|g" resources.yaml
+          sed -i "s|ENV_NICKS_CHANNEL_ID|$NICKS_CHANNEL_ID|g" resources.yaml
+          sed -i "s|ENV_SERVER_STATUS_CHANNEL_ID|$SERVER_STATUS_CHANNEL_ID|g" resources.yaml    
+          sed -i "s|ENV_MINECRAFT_SCREEN_NAME|$MINECRAFT_SCREEN_NAME|g" resources.yaml
+          sed -i "s|ENV_SERVER_LOG_CHANNEL_ID|$SERVER_LOG_CHANNEL_ID|g" resources.yaml
+          sed -i "s|ENV_TICKET_MESSAGE_ID|$TICKET_MESSAGE_ID|g" resources.yaml
+          sed -i "s|ENV_TICKET_CATEGORY_ID|$TICKET_CATEGORY_ID|g" resources.yaml
+          sed -i "s|ENV_ARCHIVE_TICKET_CATEGORY_ID|$ARCHIVE_TICKET_CATEGORY_ID|g" resources.yaml
+          sed -i "s|ENV_HYBRID_STATUS_CHANNEL_ID|$HYBRID_STATUS_CHANNEL_ID|g" resources.yaml
+          sed -i "s|ENV_SERVER_STATUS_LIST|$SERVER_STATUS_LIST|g" resources.yaml
+          sed -i "s|ENV_AUTHOR_AUTHORIZE_CATEGORY_ID|$AUTHOR_AUTHORIZE_CATEGORY_ID|g" resources.yaml
+          sed -i "s|ENV_PLAYER_NOTIFICATION_CHANNEL_ID|$PLAYER_NOTIFICATION_CHANNEL_ID|g" resources.yaml
+          sed -i "s|ENV_HYBRID_NOTIFICATION_CHANNEL_ID|$HYBRID_NOTIFICATION_CHANNEL_ID|g" resources.yaml
+          sed -i "s|ENV_HYBRID_SERVER_ID|$HYBRID_SERVER_ID|g" resources.yaml
+          kubectl apply --record -f resources.yaml
+
+      - name: Create or update API Gateway
+        run: |
+          # Create API config
+          gcloud hosts api-configs create api-config \
+            --api=api \
+            --openapi-spec=swagger.yaml \
+            --project=$GOOGLE_PROJECT \
+            --region=$CLUSTER_REGION
+
+          # Create or update API Gateway
+          if gcloud hosts gateways describe hosts --project=$GOOGLE_PROJECT --region=$CLUSTER_REGION; then
+            gcloud hosts gateways update hosts \
+              --api-config=api-config \
+              --project=$GOOGLE_PROJECT \
+              --region=$CLUSTER_REGION
+          else
+            gcloud hosts gateways create hosts \
+              --api-config=api-config \
+              --project=$GOOGLE_PROJECT \
+              --region=$CLUSTER_REGION
+          fi
+
+      - name: Restart deployment
+        run: |
+          kubectl rollout restart deployment $PROJECT_NAME
