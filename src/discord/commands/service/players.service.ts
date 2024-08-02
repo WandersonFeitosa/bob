@@ -1,5 +1,6 @@
 import { CommandInteraction } from 'discord.js';
 import { nestServices } from 'src/discord/nest-services';
+import { client } from 'src/main';
 
 export class DiscordPlayersService {
   prisma = nestServices.prisma;
@@ -105,5 +106,47 @@ export class DiscordPlayersService {
         },
       },
     });
+  }
+
+  async checkNonRegisteredPlayers(interaction: CommandInteraction) {
+    await interaction.deferReply({
+      ephemeral: true,
+    });
+
+    const playerRoleId = '1201647030938910757';
+
+    const members = await client.guilds.cache
+      .get(process.env.SERVER_ID)
+      ?.members.fetch();
+
+    const players = members?.filter((member) =>
+      member.roles.cache.has(playerRoleId),
+    );
+
+    const registeredPlayers = await this.prisma.player.findMany();
+
+    const nonRegisteredPlayers = players?.filter((player) =>
+      registeredPlayers.every(
+        (registeredPlayer) => registeredPlayer.discord_id !== player.id,
+      ),
+    );
+
+    const nonRegisteredPlayersNames = nonRegisteredPlayers?.map(
+      (player) => player.displayName,
+    );
+
+    const nonRegisteredPlayersIds = nonRegisteredPlayers?.map(
+      (player) => player.id,
+    );
+
+    interaction.editReply(
+      `Jogadores não registrados: ${
+        nonRegisteredPlayersIds
+          ?.map((name) => {
+            return `<@${name}>`;
+          })
+          .join(', ') || 'Nenhum'
+      }`,
+    );
   }
 }

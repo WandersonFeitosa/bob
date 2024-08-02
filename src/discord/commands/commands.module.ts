@@ -208,6 +208,11 @@ const commands: Command[] = [
       },
     ],
   },
+  {
+    name: 'estereis',
+    description: 'Verifica os jogadores estéreis',
+    function: new DiscordCommandsController().checkNonRegisteredPlayers,
+  },
 ];
 
 function buildCommandsObject(commands: Command[]): Record<string, Command> {

@@ -153,4 +153,14 @@ export class DiscordCommandsController {
       console.log(error);
     }
   }
+
+  async checkNonRegisteredPlayers(interaction: CommandInteraction) {
+    try {
+      return await new DiscordPlayersService().checkNonRegisteredPlayers(
+        interaction,
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  }
 }

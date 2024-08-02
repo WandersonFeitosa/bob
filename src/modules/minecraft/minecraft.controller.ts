@@ -32,6 +32,7 @@ export class MinecraftController {
   @Get('/server-logs')
   @Cron(CronExpression.EVERY_10_SECONDS)
   async serverLogs() {
+    if (process.env.NODE_ENV === 'develop') return;
     return await this.minecraftService.getServerLogs();
   }
 }
