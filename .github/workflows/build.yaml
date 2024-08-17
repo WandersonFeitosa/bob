@@ -45,6 +45,7 @@ jobs:
       PLAYER_NOTIFICATION_CHANNEL_ID: ${{ vars.PLAYER_NOTIFICATION_CHANNEL_ID }}
       HYBRID_NOTIFICATION_CHANNEL_ID: ${{ vars.HYBRID_NOTIFICATION_CHANNEL_ID }}
       HYBRID_SERVER_ID: ${{ vars.HYBRID_SERVER_ID }}
+      MINECRAFT_FORCE_START_SCRIPT_PATH: ${{ vars.MINECRAFT_FORCE_START_SCRIPT_PATH }}
 
     steps:
       - name: Checkout code
@@ -102,6 +103,7 @@ jobs:
           sed -i "s|ENV_PLAYER_NOTIFICATION_CHANNEL_ID|$PLAYER_NOTIFICATION_CHANNEL_ID|g" resources.yaml
           sed -i "s|ENV_HYBRID_NOTIFICATION_CHANNEL_ID|$HYBRID_NOTIFICATION_CHANNEL_ID|g" resources.yaml
           sed -i "s|ENV_HYBRID_SERVER_ID|$HYBRID_SERVER_ID|g" resources.yaml
+          sed -i "s|ENV_MINECRAFT_FORCE_START_SCRIPT_PATH|$MINECRAFT_FORCE_START_SCRIPT_PATH|g" resources.yaml
           kubectl apply --record -f resources.yaml
 
       - name: Restart deployment

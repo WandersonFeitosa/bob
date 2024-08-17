@@ -99,3 +99,5 @@ spec:
               value: ENV_HYBRID_NOTIFICATION_CHANNEL_ID
             - name: HYBRID_SERVER_ID
               value: ENV_HYBRID_SERVER_ID
+            - name: MINECRAFT_FORCE_START_SCRIPT_PATH
+              value: ENV_MINECRAFT_FORCE_START_SCRIPT_PATH

@@ -4,6 +4,7 @@ import * as net from 'net';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { BobService } from '../bob/bob.service';
 import { sendServerMessage } from 'src/utils/send-message-on-channel';
+import { ManagerProxy } from 'src/infrastructure/proxy/manager.proxy';
 
 @Injectable()
 export class MinecraftService {
@@ -11,6 +12,7 @@ export class MinecraftService {
   constructor(
     private prisma: PrismaService,
     private bobService: BobService,
+    private managerProxy: ManagerProxy,
   ) {}
 
   serverIp = process.env.MINECRAFT_SERVER_IP || '35.222.128.103';
@@ -111,9 +113,16 @@ export class MinecraftService {
     }
 
     if (dbServerStatus.status === 'starting') {
+      const serverStartValidation = await this.validateServerStart();
+      if (serverStartValidation) {
+        return {
+          statusCode: 200,
+          message: 'O servidor está iniciando, aguarde um momento.',
+        };
+      }
       return {
         statusCode: 200,
-        message: 'O servidor está iniciando, aguarde um momento.',
+        message: 'O servidor está iniciando, forçando início.',
       };
     }
 
@@ -163,6 +172,55 @@ export class MinecraftService {
     };
   }
 
+  async validateServerStart(): Promise<boolean> {
+    const dbServerStatus = await this.prisma.minecraftServerStatus.findFirst({
+      where: {
+        ip: this.serverIp,
+        port: this.serverPort,
+      },
+    });
+
+    const ping = await this.ping();
+
+    if (dbServerStatus.status !== 'starting' || ping) return;
+
+    const date = new Date();
+    const lastUpdate = dbServerStatus.update_at;
+
+    const diff = date.getTime() - lastUpdate.getTime();
+
+    if (diff > 1000 * 60 * 2) {
+      await this.managerProxy.executeShellFile({
+        serverIp: this.serverIp,
+        managerPort: this.managerPort,
+        filePath:
+          process.env.MINECRAFT_FORCE_START_SCRIPT_PATH ||
+          '/home/ssd/projects/mcs-manager/start_server.sh',
+      });
+
+      console.log('Forcing server start');
+
+      this.announceChannelIds.forEach((channelId) => {
+        this.bobService.sendServerMessage({
+          channelId,
+          message: 'Servidor não iniciado, forçando início.',
+        });
+      });
+
+      await this.prisma.minecraftServerStatus.update({
+        where: {
+          id: dbServerStatus.id,
+        },
+        data: {
+          status: 'starting',
+        },
+      });
+
+      return false;
+    }
+    return true;
+  }
+
   async startServer(): Promise<{
     statusCode: number;
     message: string;
@@ -175,25 +233,10 @@ export class MinecraftService {
         },
       });
 
-      if (
-        dbServerStatus.status === 'online' ||
-        dbServerStatus.status === 'backup' ||
-        dbServerStatus.status === 'starting'
-      )
-        return {
-          statusCode: 200,
-          message: 'O servidor já está iniciando ou online',
-        };
-
-      const response = await axios.get(
-        `http://${this.serverIp}:${this.managerPort}/startServer`,
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${process.env.MINECRAFT_MANAGER_TOKEN}`,
-          },
-        },
-      );
+      const response = await this.managerProxy.startServer({
+        serverIp: this.serverIp,
+        managerPort: this.managerPort,
+      });
 
       await this.prisma.minecraftServerStatus.update({
         where: {
@@ -204,7 +247,10 @@ export class MinecraftService {
         },
       });
 
-      return response.data;
+      return {
+        statusCode: 200,
+        message: response.message,
+      };
     } catch (error) {
       console.log(error);
       throw new HttpException(error, 500);
@@ -389,7 +435,7 @@ export class MinecraftService {
         const message = logsToSend[i];
 
         if (message.length > 1999) continue;
-        
+
         await sendServerMessage({
           channelId:
             process.env.SERVER_LOGS_CHANNEL_ID || '1266622588629815328',
