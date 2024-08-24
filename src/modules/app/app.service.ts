@@ -5,7 +5,7 @@ import { WolksProxy } from 'src/infrastructure/proxy/wolks/manager.proxy';
 export class AppService {
   constructor(private readonly wolksProxy: WolksProxy) {}
   getHello(): string {
-    return 'UP!';
+    return 'Hello World!';
   }
   async healthWolks() {
     const response = await this.wolksProxy.health();
