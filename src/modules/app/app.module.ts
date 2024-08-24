@@ -9,7 +9,6 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { FileModule } from '../file/file.module';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { LoggingInterceptor } from 'src/infrastructure/interceptors/logging.interceptor';
-import { WolksProxy } from 'src/infrastructure/proxy/wolks/manager.proxy';
 
 @Module({
   imports: [
@@ -18,13 +17,12 @@ import { WolksProxy } from 'src/infrastructure/proxy/wolks/manager.proxy';
     BobModule,
     PrismaModule,
     MinecraftModule,
-    FileModule,
+    FileModule
   ],
   controllers: [AppController],
   providers: [
     AppService,
     { provide: APP_INTERCEPTOR, useClass: LoggingInterceptor },
-    WolksProxy,
   ],
 })
 export class AppModule {}
