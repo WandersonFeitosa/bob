@@ -7,10 +7,8 @@ import { PrismaModule } from 'src/prisma/prisma.module';
 import { MinecraftModule } from '../minecraft/minecraft.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { FileModule } from '../file/file.module';
-import { ComputeEngineModule } from '../compute-engine/compute-engine.module';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { LoggingInterceptor } from 'src/infrastructure/interceptors/logging.interceptor';
-import { NiucoMockModule } from '../niuco-mock/niuco-mock.module';
 
 @Module({
   imports: [
@@ -19,9 +17,7 @@ import { NiucoMockModule } from '../niuco-mock/niuco-mock.module';
     BobModule,
     PrismaModule,
     MinecraftModule,
-    FileModule,
-    ComputeEngineModule,
-    NiucoMockModule,
+    FileModule
   ],
   controllers: [AppController],
   providers: [
