@@ -2,7 +2,7 @@ import { BobService } from 'src/modules/bob/bob.service';
 import { MinecraftService } from 'src/modules/minecraft/minecraft.service';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { FileService } from 'src/modules/file/file.service';
-import { ManagerProxy } from 'src/infrastructure/proxy/manager.proxy';
+import { ManagerProxy } from 'src/infrastructure/proxy/manager/manager.proxy';
 
 class NestServices {
   prisma = new PrismaService();

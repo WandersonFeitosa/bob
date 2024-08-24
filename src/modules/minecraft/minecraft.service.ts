@@ -4,7 +4,7 @@ import * as net from 'net';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { BobService } from '../bob/bob.service';
 import { sendServerMessage } from 'src/utils/send-message-on-channel';
-import { ManagerProxy } from 'src/infrastructure/proxy/manager.proxy';
+import { ManagerProxy } from 'src/infrastructure/proxy/manager/manager.proxy';
 
 @Injectable()
 export class MinecraftService {
