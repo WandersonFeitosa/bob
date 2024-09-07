@@ -53,7 +53,6 @@ async function startDiscordConnection() {
 
   client.once(Events.ClientReady, (readyClient) => {
     console.log(`Ready! Logged in as ${readyClient.user.tag}`);
-    bootstrap();
     let activities: ActivitiesOptions[] = [
       {
         name: 'ele falar bosta ⬇⬇⬇',
@@ -99,17 +98,14 @@ async function startDiscordConnection() {
 }
 
 async function bootstrap() {
+  await startDiscordConnection();
   const app = await NestFactory.create(AppModule, {
     cors: true,
   });
   app.useGlobalPipes(new ValidationPipe());
-  app.use((req: Request, res: Response, next: NextFunction) => {
-    res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
-    res.header('Access-Control-Allow-Headers', '*');
-    next();
-  });
+  app.enableCors();
   await app.listen(process.env.PORT || 3000);
   console.log(`Server started on port ${process.env.PORT || 3000}`);
 }
-startDiscordConnection();
+
+bootstrap();
