@@ -53,6 +53,7 @@ async function startDiscordConnection() {
 
   client.once(Events.ClientReady, (readyClient) => {
     console.log(`Ready! Logged in as ${readyClient.user.tag}`);
+    bootstrap();
     let activities: ActivitiesOptions[] = [
       {
         name: 'ele falar bosta ⬇⬇⬇',
@@ -111,6 +112,4 @@ async function bootstrap() {
   await app.listen(process.env.PORT || 3000);
   console.log(`Server started on port ${process.env.PORT || 3000}`);
 }
-bootstrap().then(() => {
-  startDiscordConnection();
-});
+startDiscordConnection();
