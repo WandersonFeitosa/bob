@@ -24,13 +24,15 @@ jobs:
           VM_HOST: ${{ secrets.VM_HOST }}
           VM_USER: ${{ secrets.VM_USER }}
           VM_DEPLOY_PATH: ${{ secrets.VM_DEPLOY_PATH }}
-
+          GCP_CREDENTIALS_JSON: ${{ secrets.GCP_CREDENTIALS_JSON }}
         run: |
           ssh $VM_USER@$VM_HOST << EOF
-            cd $VM_DEPLOY_PATH
-            echo "${{ secrets.CREDENTIALS_JSON }}" > credentials.json
-          EOF
 
+            cd $VM_DEPLOY_PATH
+            cat << EOT > credentials.json
+            $GCP_CREDENTIALS_JSON
+          EOF
+          
       - name: Deploy to VM
 
         env:
