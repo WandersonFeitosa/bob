@@ -32,7 +32,7 @@ jobs:
             cat << EOT > credentials.json
             $GCP_CREDENTIALS_JSON
           EOF
-          
+
       - name: Deploy to VM
 
         env:
@@ -45,6 +45,7 @@ jobs:
 
           # Generate .env file
           ssh $VM_USER@$VM_HOST << EOF
+            mkdir -p $VM_DEPLOY_PATH
             cd $VM_DEPLOY_PATH
             
             # Generate .env file
