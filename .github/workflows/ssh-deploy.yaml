@@ -29,11 +29,11 @@ jobs:
           scp -r ./* $VM_USER@$VM_HOST:$VM_DEPLOY_PATH
 
           # Generate .env file and start Docker Compose
-          ssh $VM_USER@$VM_HOST << EOF
+          ssh $VM_USER@$VM_HOST << 'EOF'
             cd $VM_DEPLOY_PATH
             
             # Generate .env file
-            cat << EOT > .env
+            cat << 'EOT' > .env
             CLIENT_ID=${{ secrets.CLIENT_ID }}
             CLIENT_SECRET=${{ secrets.CLIENT_SECRET }}
             DISCORD_TOKEN=${{ secrets.DISCORD_TOKEN }}
@@ -65,7 +65,7 @@ jobs:
             HYBRID_SERVER_ID=${{ secrets.HYBRID_SERVER_ID }}
             MINECRAFT_FORCE_START_SCRIPT_PATH=${{ secrets.MINECRAFT_FORCE_START_SCRIPT_PATH }}
             EOT
-            
+
             # Start Docker Compose
             sudo docker compose up -d --build
           EOF
