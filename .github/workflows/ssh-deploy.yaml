@@ -1,0 +1,69 @@
+name: Deploy to VM
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install SSH key
+        uses: shimataro/ssh-key-action@v2
+        with:
+          key: ${{ secrets.VM_SSH_PRIVATE_KEY }}
+
+      - name: Deploy to VM
+        env:
+          VM_HOST: ${{ secrets.VM_HOST }}
+          VM_USER: ${{ secrets.VM_USER }}
+          VM_DEPLOY_PATH: ${{ secrets.VM_DEPLOY_PATH }}
+        run: |
+          # Copy files to VM
+          scp -r ./* $VM_USER@$VM_HOST:$VM_DEPLOY_PATH
+
+          # Generate .env file and start Docker Compose
+          ssh $VM_USER@$VM_HOST << EOF
+            cd $VM_DEPLOY_PATH
+            
+            # Generate .env file
+            cat << EOT > .env
+            CLIENT_ID=${{ secrets.CLIENT_ID }}
+            CLIENT_SECRET=${{ secrets.CLIENT_SECRET }}
+            DISCORD_TOKEN=${{ secrets.DISCORD_TOKEN }}
+            ADMIN_ROLES=${{ secrets.ADMIN_ROLES }}
+            SERVER_ID=${{ secrets.SERVER_ID }}
+            DATABASE_URL=${{ secrets.DATABASE_URL }}
+            JWT_SECRET=${{ secrets.JWT_SECRET }}
+            MINECRAFT_SERVER_IP=${{ secrets.MINECRAFT_SERVER_IP }}
+            MINECRAFT_SERVER_PORT=${{ secrets.MINECRAFT_SERVER_PORT }}
+            MINECRAFT_MANAGER_PORT=${{ secrets.MINECRAFT_MANAGER_PORT }}
+            MINECRAFT_MANAGER_TOKEN=${{ secrets.MINECRAFT_MANAGER_TOKEN }}
+            MINECRAFT_ANNOUNCE_CHANNEL_ID=${{ secrets.MINECRAFT_ANNOUNCE_CHANNEL_ID }}
+            PROJECT_ID=${{ secrets.PROJECT_ID }}
+            BUCKET_NAME=${{ secrets.BUCKET_NAME }}
+            APPROVE_ARTS_CHANNEL_ID=${{ secrets.APPROVE_ARTS_CHANNEL_ID }}
+            ARTS_PANNEL_CHANNEL_ID=${{ secrets.ARTS_PANNEL_CHANNEL_ID }}
+            NICKS_CHANNEL_ID=${{ secrets.NICKS_CHANNEL_ID }}
+            SERVER_STATUS_CHANNEL_ID=${{ secrets.SERVER_STATUS_CHANNEL_ID }}
+            MINECRAFT_SCREEN_NAME=${{ secrets.MINECRAFT_SCREEN_NAME }}
+            SERVER_LOG_CHANNEL_ID=${{ secrets.SERVER_LOG_CHANNEL_ID }}
+            TICKET_MESSAGE_ID=${{ secrets.TICKET_MESSAGE_ID }}
+            TICKET_CATEGORY_ID=${{ secrets.TICKET_CATEGORY_ID }}
+            ARCHIVE_TICKET_CATEGORY_ID=${{ secrets.ARCHIVE_TICKET_CATEGORY_ID }}
+            HYBRID_STATUS_CHANNEL_ID=${{ secrets.HYBRID_STATUS_CHANNEL_ID }}
+            SERVER_STATUS_LIST=${{ secrets.SERVER_STATUS_LIST }}
+            AUTHOR_AUTHORIZE_CATEGORY_ID=${{ secrets.AUTHOR_AUTHORIZE_CATEGORY_ID }}
+            PLAYER_NOTIFICATION_CHANNEL_ID=${{ secrets.PLAYER_NOTIFICATION_CHANNEL_ID }}
+            HYBRID_NOTIFICATION_CHANNEL_ID=${{ secrets.HYBRID_NOTIFICATION_CHANNEL_ID }}
+            HYBRID_SERVER_ID=${{ secrets.HYBRID_SERVER_ID }}
+            MINECRAFT_FORCE_START_SCRIPT_PATH=${{ secrets.MINECRAFT_FORCE_START_SCRIPT_PATH }}
+            EOT
+            
+            # Start Docker Compose
+            sudo docker compose up -d --build
+          EOF
