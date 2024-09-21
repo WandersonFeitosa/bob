@@ -36,6 +36,8 @@ services:
       - HYBRID_NOTIFICATION_CHANNEL_ID=${HYBRID_NOTIFICATION_CHANNEL_ID}
       - HYBRID_SERVER_ID=${HYBRID_SERVER_ID}
       - MINECRAFT_FORCE_START_SCRIPT_PATH=${MINECRAFT_FORCE_START_SCRIPT_PATH}
+      - GOOGLE_PROJECT=${GOOGLE_PROJECT}
+
     deploy:
       resources:
         limits:
@@ -45,3 +47,8 @@ services:
           cpus: '0.1'
           memory: 256M
     restart: always
+    command: >
+      sh -c "
+        gcloud config set project $${GOOGLE_PROJECT} &&
+        npm run start:prod
+      "
