@@ -10,11 +10,15 @@ COPY package*.json ./
 # Install application dependencies
 RUN npm install
 
-# Install application dependencies
-RUN npm run build
-
 # Copy the entire application to the container
 COPY . .
+
+# Generate Prisma client
+RUN npx prisma generate
+
+# Install application dependencies
+
+RUN npm run build
 
 # Expose the port that the application will run on
 EXPOSE 3000
