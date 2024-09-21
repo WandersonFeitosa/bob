@@ -36,12 +36,10 @@ jobs:
             echo "Generating .env file..."
             
             # Generate .env file
-            cat << 'EOT' > .env
-            CLIENT_ID=${{ secrets.CLIENT_ID }}
-            CLIENT_SECRET=${{ secrets.CLIENT_SECRET }}
-            # ... (other environment variables) ...
-            MINECRAFT_FORCE_START_SCRIPT_PATH=${{ secrets.MINECRAFT_FORCE_START_SCRIPT_PATH }}
-            EOT
+            echo "CLIENT_ID=${{ secrets.CLIENT_ID }}" > .env
+            echo "CLIENT_SECRET=${{ secrets.CLIENT_SECRET }}" >> .env
+            # Add other environment variables here
+            echo "MINECRAFT_FORCE_START_SCRIPT_PATH=${{ secrets.MINECRAFT_FORCE_START_SCRIPT_PATH }}" >> .env
 
             echo "Contents of .env file:"
             cat .env
