@@ -70,10 +70,10 @@ jobs:
         env:
           VM_HOST: ${{ secrets.VM_HOST }}
           VM_USER: ${{ secrets.VM_USER }}
+          VM_DEPLOY_PATH: ${{ secrets.VM_DEPLOY_PATH }}
         run: |
           ssh $VM_USER@$VM_HOST << EOF
 
             cd $VM_DEPLOY_PATH
-            ls -la
             sudo docker compose up -d --build
           EOF
