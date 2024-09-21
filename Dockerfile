@@ -13,15 +13,11 @@ RUN npm install
 # Copy the entire application to the container
 COPY . .
 
-# Generate Prisma client
-RUN npx prisma generate
-
 # Install application dependencies
-
 RUN npm run build
 
 # Expose the port that the application will run on
 EXPOSE 3000
 
 # Define the command to run your application
-CMD ["npm", "run", "start:prod"]
+CMD ["npm", "run", "start"]
