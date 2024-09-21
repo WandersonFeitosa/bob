@@ -18,13 +18,6 @@ COPY ./credentials.json ./credentials.json
 # Authenticate with Google Cloud
 RUN gcloud auth activate-service-account --key-file=./credentials.json
 
-RUN gcloud config set project decent-micron-434613-t6
-# Install kubectl
-RUN apt-get update && \
-    apt-get install -y google-cloud-sdk-gke-gcloud-auth-plugin
-
-# Connect to the cluster
-RUN gcloud container clusters get-credentials deadlock-cluster --region southamerica-east1-b
 
 # Copy package.json and package-lock.json to the working directory
 COPY package*.json ./
