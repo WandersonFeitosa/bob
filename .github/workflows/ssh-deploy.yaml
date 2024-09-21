@@ -19,11 +19,20 @@ jobs:
           known_hosts: ${{ secrets.VM_KNOWN_HOSTS }}
           if_key_exists: replace
 
-      - name: Create credentials.json
+      - name: Generate credentials.json
+        env:
+          VM_HOST: ${{ secrets.VM_HOST }}
+          VM_USER: ${{ secrets.VM_USER }}
+          VM_DEPLOY_PATH: ${{ secrets.VM_DEPLOY_PATH }}
+
         run: |
-          echo "${{ secrets.CREDENTIALS_JSON }}" > credentials.json
+          ssh $VM_USER@$VM_HOST << EOF
+            cd $VM_DEPLOY_PATH
+            echo "${{ secrets.CREDENTIALS_JSON }}" > credentials.json
+          EOF
 
       - name: Deploy to VM
+
         env:
           VM_HOST: ${{ secrets.VM_HOST }}
           VM_USER: ${{ secrets.VM_USER }}
@@ -72,6 +81,7 @@ jobs:
           EOF
 
       - name: Start Docker Compose
+
         env:
           VM_HOST: ${{ secrets.VM_HOST }}
           VM_USER: ${{ secrets.VM_USER }}
