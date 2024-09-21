@@ -13,7 +13,7 @@ RUN apt-get update && \
     apt-get install -y google-cloud-cli 
 
 # Copy the credentials.json file to the container
-COPY credentials/credentials.json ./credentials.json
+COPY ./credentials.json ./credentials.json
 
 # Authenticate with Google Cloud
 RUN gcloud auth activate-service-account --key-file=./credentials.json
