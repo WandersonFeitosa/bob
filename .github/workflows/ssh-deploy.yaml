@@ -64,5 +64,15 @@ jobs:
             HYBRID_NOTIFICATION_CHANNEL_ID=${{ secrets.HYBRID_NOTIFICATION_CHANNEL_ID }}
             HYBRID_SERVER_ID=${{ secrets.HYBRID_SERVER_ID }}
             MINECRAFT_FORCE_START_SCRIPT_PATH=${{ secrets.MINECRAFT_FORCE_START_SCRIPT_PATH }}
-            EOT
+          EOF
+
+      - name: Start Docker Compose
+        env:
+          VM_HOST: ${{ secrets.VM_HOST }}
+          VM_USER: ${{ secrets.VM_USER }}
+        run: |
+          ssh $VM_USER@$VM_HOST << EOF
+
+            cd $VM_DEPLOY_PATH
+            sudo docker compose up -d --build
           EOF
